@@ -1,0 +1,26 @@
+@import "part:@sanity/base/theme/variables-style";
+
+.root {
+  border: 1px solid var(--state-warning-color);
+  border-radius: var(--input-border-radius);
+  padding: var(--medium-padding);
+}
+
+.heading {
+  font-size: var(--font-size-base);
+  display: flex;
+  align-items: center;
+  margin: 0;
+  margin-bottom: var(--extra-small-padding);
+}
+
+.icon {
+  display: flex;
+  font-size: 20px;
+  color: var(--state-warning-color);
+  margin-left: var(--small-padding);
+}
+
+.description {
+  margin: 0;
+}

@@ -1,0 +1,78 @@
+@import "part:@sanity/base/theme/variables-style";
+
+.root {
+  padding: var(--extra-small-padding) 0;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-betweeen;
+  flex-wrap: wrap;
+}
+
+.event {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+  max-width: 600px;
+}
+
+.previewContainer {
+  border-radius: var(--input-border-radius);
+  overflow: hidden;
+  flex: 1;
+  height: 125px;
+  max-width: 125px;
+  min-width: 125px;
+
+  @nest & img {
+    object-fit: contain;
+  }
+}
+
+.details {
+  margin-left: var(--medium-padding);
+}
+
+.label {
+  color: var(--text-muted);
+  font-size: var(--font-size-xsmall--uppercase);
+  line-height: var(--line-height-xsmall--uppercase);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: var(--extra-small-padding);
+}
+
+.value {
+  display: block;
+  margin-bottom: var(--small-padding);
+}
+
+.intent {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.actionsWrapper {
+  align-self: center;
+  flex: auto;
+  display: flex;
+  max-width: 600px;
+  margin-left: auto;
+  height: 100%;
+}
+
+.intentButton {
+  width: 100%;
+  max-width: 200px;
+  margin-left: auto;
+  align-self: center;
+}
+
+.warning {
+  max-width: 400px;
+  margin-right: var(--medium-padding);
+}
