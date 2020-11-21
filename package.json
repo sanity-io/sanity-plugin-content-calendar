@@ -2,11 +2,21 @@
   "name": "sanity-plugin-content-calendar",
   "version": "1.0.0",
   "description": "A Content Calendar for your Sanity Studio",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rune Botten",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "date-fns": "^2.16.1",
+    "react-big-calendar": "^0.28.6"
+  },
+  "peerDependencies": {
+    "@sanity/base": "^2.0.2",
+    "@sanity/components": "^2.0.2",
+    "@sanity/react-hooks": "^2.0.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
 }
