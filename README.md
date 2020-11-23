@@ -22,16 +22,20 @@ Open up the config file found in ./config/content-calendar.json and add your doc
 
 ```json
 {
-    "types": [
-        {
-            "type": "post",
-            "field": "publishedAt"
-        },
-        {
-            "type": "landingPage",
-            "field": "publishedAt"
-        }
-    ]
+  "types": [
+    {
+      "type": "post",
+      "field": "publishedAt",
+      "titleField": "title"
+    }
+  ],
+  "calendar": {
+    "event": {
+      "dateFormat": "MMMM, dd yyyy",
+      "timeFormat": "hh:mm a",
+      "showAuthor": "false"
+    }
+  }
 }
 ```
 
