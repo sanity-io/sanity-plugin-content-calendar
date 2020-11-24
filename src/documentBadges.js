@@ -1,20 +1,24 @@
-import defaultResolve from 'part:@sanity/base/document-badges'
-import { useScheduleMetadata } from './scheduling'
+import defaultResolve from "part:@sanity/base/document-badges";
+import { useScheduleMetadata } from "./scheduling";
 
 function scheduleBadge({ id, draft }) {
-  const metadata = useScheduleMetadata(id)
+  const metadata = useScheduleMetadata(id);
   if (draft && metadata.data && metadata.data.datetime) {
-    const time = metadata.data.datetime
+    const time = metadata.data.datetime;
     return {
-      label: 'Scheduled',
+      label: "Scheduled",
       title: `Scheduled to publish at ${time}`,
-      color: 'warning'
-    }
+      color: "warning",
+    };
   }
-  return null
+  return null;
+}
+
+export function addScheduledBadge(badges) {
+  return badges.concat(scheduleBadge);
 }
 
 export default function resolveDocumentBadges(props) {
-  const badges = defaultResolve(props)
-  return badges.concat(scheduleBadge)
+  const badges = defaultResolve(props);
+  return addScheduledBadge(scheduleBadge, badges);
 }

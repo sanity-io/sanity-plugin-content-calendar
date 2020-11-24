@@ -34,19 +34,23 @@ function CustomPublishAction(params) {
   };
 }
 
-export default function resolveDocumentActions(docInfo) {
-  const defaultActions = defaultResolver(docInfo);
-  if (schedulingEnabled(docInfo.type)) {
+export function adjustActionsForScheduledPublishing(props, actions) {
+  if (schedulingEnabled(props.type)) {
     return [
       scheduleAction,
       unScheduleAction,
       CustomPublishAction,
       CustomDeleteAction,
     ].concat(
-      defaultActions.filter(
+      actions.filter(
         (action) => !["DeleteAction", "PublishAction"].includes(action.name)
       )
     );
   }
-  return defaultActions;
+  return actions;
+}
+
+export default function resolveDocumentActions(props) {
+  const defaultActions = defaultResolver(props);
+  return adjustActionsForScheduledPublishing(props, defaultActions);
 }
