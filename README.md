@@ -1,6 +1,6 @@
 # Content Calendar
 
-Viewed your scheduled content posts in a visual calendar. Prioritize and get organized on the fly.
+Schedule content for later publication and view your content agenda in a visual calendar. Prioritize and get organized on the fly.
 
 TODO: SCREENSHOT
 
