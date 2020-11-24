@@ -1,34 +1,24 @@
-import React from "react"
-import IntentButton from "part:@sanity/components/buttons/intent"
-import Button from "part:@sanity/components/buttons/default"
-import Dialog from "part:@sanity/components/dialogs/default"
-import styles from "./EventDialog.css"
-import ButtonGrid from "part:@sanity/components/buttons/button-grid"
-import HistoryIcon from "part:@sanity/base/history-icon"
-import EditIcon from "part:@sanity/base/edit-icon"
-import schema from "part:@sanity/base/schema"
-import Preview from "part:@sanity/base/preview"
-import { useHasChanges } from "./hooks"
-import Warning from "./Warning"
-import { format } from "date-fns"
-import User from "./User"
-import {
-  dateFormat,
-  timeFormat,
-  dialogTitle,
-  types,
-  showAuthor,
-} from "./config"
-import { getPublishedId } from "part:@sanity/base/util/draft-utils"
+import React from 'react'
+import IntentButton from 'part:@sanity/components/buttons/intent'
+import Button from 'part:@sanity/components/buttons/default'
+import Dialog from 'part:@sanity/components/dialogs/default'
+import styles from './EventDialog.css'
+import ButtonGrid from 'part:@sanity/components/buttons/button-grid'
+import HistoryIcon from 'part:@sanity/base/history-icon'
+import EditIcon from 'part:@sanity/base/edit-icon'
+import schema from 'part:@sanity/base/schema'
+import Preview from 'part:@sanity/base/preview'
+import { useHasChanges } from './hooks'
+import Warning from './Warning'
+import { format } from 'date-fns'
+import User from './User'
+import { dateFormat, timeFormat, dialogTitle, showAuthor } from './config'
+import { getPublishedId } from 'part:@sanity/base/util/draft-utils'
 
 export default function EventDialog({ event, isOpen, onClose }) {
   const hasChanges = useHasChanges(event)
   const publishedId = getPublishedId(event.doc._id)
-  const type = types.find((t) => t.type === event.doc._type)
-  const title =
-    dialogTitle === "date"
-      ? format(event.start, dateFormat)
-      : "Schedule details"
+  const title = dialogTitle === 'date' ? format(event.start, dateFormat) : 'Schedule details'
   return (
     <Dialog
       isOpen={isOpen}
@@ -45,19 +35,14 @@ export default function EventDialog({ event, isOpen, onClose }) {
         )}
         <div className={styles.inner}>
           <div className={styles.previewContainer}>
-            <Preview
-              value={event.doc}
-              type={schema.get(event.doc._type)}
-              layout="media"
-            />
+            <Preview value={event.doc} type={schema.get(event.doc._type)} layout="media" />
           </div>
           <div className={styles.details}>
             <h3 className={styles.label}>Title</h3>
             <div className={styles.value}>{event.title}</div>
             <h3 className={styles.label}>Scheduled for</h3>
             <time className={styles.value}>
-              {format(event.start, dateFormat)} •{" "}
-              {format(event.start, timeFormat)}
+              {format(event.start, dateFormat)} • {format(event.start, timeFormat)}
             </time>
 
             {event.user && showAuthor && (
@@ -78,7 +63,7 @@ export default function EventDialog({ event, isOpen, onClose }) {
               intent="edit"
               params={{ id: publishedId, type: event.doc._type }}
             >
-              {hasChanges ? "Review changes" : "Edit"}
+              {hasChanges ? 'Review changes' : 'Edit'}
             </IntentButton>
             <Button secondary kind="inverted" onClick={onClose}>
               Cancel

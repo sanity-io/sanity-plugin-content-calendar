@@ -1,6 +1,6 @@
-import React from "react"
-import WarningIcon from "part:@sanity/base/warning-icon"
-import styles from "./Warning.css"
+import React from 'react'
+import WarningIcon from 'part:@sanity/base/warning-icon'
+import styles from './Warning.css'
 
 export default function Warning() {
   return (
@@ -12,8 +12,8 @@ export default function Warning() {
         </span>
       </h3>
       <p className={styles.description}>
-        The document has changed since it was scheduled for publishing. Please
-        review it and reschedule it if needed.
+        The document has changed since it was scheduled for publishing. Please review it and
+        reschedule it if needed.
       </p>
     </div>
   )

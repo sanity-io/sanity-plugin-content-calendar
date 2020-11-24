@@ -1,7 +1,7 @@
-import React from "react"
-import { UserAvatar } from "@sanity/base/components"
-import { useUserColorManager } from "@sanity/base/user-color"
-import styles from "./User.css"
+import React from 'react'
+import { UserAvatar } from '@sanity/base/components'
+import { useUserColorManager } from '@sanity/base/user-color'
+import styles from './User.css'
 
 export default function User({ user, minimal = false }) {
   const userColorManager = useUserColorManager()

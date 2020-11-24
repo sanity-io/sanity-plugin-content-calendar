@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react"
-import Spinner from "part:@sanity/components/loading/spinner"
-import "react-big-calendar/lib/css/react-big-calendar.css?raw"
-import { Calendar as CalendarUI, dateFnsLocalizer } from "react-big-calendar"
-import pluginConfig from "config:content-calendar"
-import { format, parse, startOfWeek, getDay, parseISO, isPast } from "date-fns"
-import EventDialog from "./EventDialog"
-import { useHasChanges } from "./hooks"
+import React, { useEffect, useState } from 'react'
+import 'react-big-calendar/lib/css/react-big-calendar.css?raw'
+import { Calendar as CalendarUI, dateFnsLocalizer } from 'react-big-calendar'
+import { format, parse, startOfWeek, getDay, isPast } from 'date-fns'
+import EventDialog from './EventDialog'
 
-import styles from "./Calendar.css"
-import { useEvents } from "./hooks"
-import Event from "./Event"
-import { nativeOptions } from "./config"
-import AgendaEvent from "./AgendaEvent"
+import styles from './Calendar.css'
+import { useEvents } from './hooks'
+import Event from './Event'
+import { nativeOptions } from './config'
+import AgendaEvent from './AgendaEvent'
 
 /* TODO
   - Add loading states to event dialog and agenda events
@@ -24,7 +21,7 @@ import AgendaEvent from "./AgendaEvent"
 */
 
 const locales = {
-  "en-US": require("date-fns/locale/en-US"),
+  'en-US': require('date-fns/locale/en-US'),
 }
 const localizer = dateFnsLocalizer({
   format,
@@ -40,19 +37,11 @@ const components = {
     event: AgendaEvent,
   },
 }
-console.log(nativeOptions)
 
 export default function Calendar() {
   const events = useEvents()
-  const [dateRange, setDateRange] = useState({ start: null, end: null })
   const [isOpen, setIsOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState(null)
-
-  const handleMonthChange = (selectedRange) => {
-    const { start, end } = selectedRange
-    setDateRange({ start, end })
-    console.log("start", start, "end", end)
-  }
 
   const handleOpenDialog = (event) => {
     setIsOpen(true)
@@ -71,11 +60,10 @@ export default function Calendar() {
         className={styles.calendar}
         localizer={localizer}
         events={events}
-        onRangeChange={handleMonthChange}
         startAccessor="start"
         endAccessor="end"
         onSelectEvent={handleOpenDialog}
-        eventPropGetter={({ doc, start, isSelected }) => {
+        eventPropGetter={({ start }) => {
           return {
             className: `
               ${styles.event} 
@@ -85,13 +73,7 @@ export default function Calendar() {
         }}
         {...nativeOptions}
       />
-      {isOpen && (
-        <EventDialog
-          event={selectedEvent}
-          isOpen={isOpen}
-          onClose={handleCloseDialog}
-        />
-      )}
+      {isOpen && <EventDialog event={selectedEvent} isOpen={isOpen} onClose={handleCloseDialog} />}
     </div>
   )
 }

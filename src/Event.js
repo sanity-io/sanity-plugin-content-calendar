@@ -1,12 +1,9 @@
-import React from "react"
-import styles from "./Event.css"
-import { useHasChanges } from "./hooks"
-import WarningIcon from "part:@sanity/base/warning-icon"
-import { Tooltip } from "part:@sanity/components/tooltip"
-import Preview from "part:@sanity/base/preview"
-import schema from "part:@sanity/base/schema"
-import { format } from "date-fns"
-import { timeFormat, showAuthor } from "./config"
+import React from 'react'
+import styles from './Event.css'
+import { useHasChanges } from './hooks'
+import WarningIcon from 'part:@sanity/base/warning-icon'
+import { format } from 'date-fns'
+import { timeFormat } from './config'
 
 export default function Event({ event }) {
   const hasChanges = useHasChanges(event)

@@ -1,15 +1,15 @@
-import { useDocumentOperation, useEditState } from "@sanity/react-hooks"
-import { isFuture, parseISO, parse } from "date-fns"
-import config from "config:content-calendar"
-import userStore from "part:@sanity/base/user"
+import { useDocumentOperation, useEditState } from '@sanity/react-hooks'
+import { isFuture, parseISO } from 'date-fns'
+import config from 'config:content-calendar'
+import userStore from 'part:@sanity/base/user'
 
 export function schedulingEnabled(type) {
-  return !!config.types.find(t => t.type === type)
+  return !!config.types.find((t) => t.type === type)
 }
 
 export function publishAt({ draft }) {
   if (!draft) return null
-  const typeConfig = config.types.find(t => t.type === draft._type)
+  const typeConfig = config.types.find((t) => t.type === draft._type)
   if (typeConfig) {
     return draft[typeConfig.field]
   }
@@ -26,7 +26,7 @@ export function publishInFuture({ draft }) {
 
 export function isScheduled({ id }) {
   const metadata = useScheduleMetadata(id)
-  return metadata && metadata.data && (!!metadata.data.datetime && !!metadata.data.rev)
+  return metadata && metadata.data && !!metadata.data.datetime && !!metadata.data.rev
 }
 
 export function useScheduleMetadata(id) {
@@ -42,7 +42,7 @@ export function useScheduleMetadata(id) {
     commit,
     data,
     delete: deleteMetadata,
-    setData
+    setData,
   }
 
   function commit() {
@@ -54,10 +54,10 @@ export function useScheduleMetadata(id) {
   }
 
   function setData(datetime, rev) {
-    const user = userStore.getUser("me").then((user) => {
+    userStore.getUser('me').then((user) => {
       const now = new Date(Date.now())
-    ops.patch.execute([
-      {
+      ops.patch.execute([
+        {
           setIfMissing: {
             documentId: id,
             user,
@@ -69,7 +69,7 @@ export function useScheduleMetadata(id) {
           set: { datetime, rev, user, scheduledAt: now.toISOString() },
         },
       ])
-    ops.publish.execute()
+      ops.publish.execute()
     })
   }
 }

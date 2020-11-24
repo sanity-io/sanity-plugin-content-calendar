@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from "react";
-import client from "part:@sanity/base/client";
-import { parseISO, isAfter } from "date-fns";
-import config from "config:content-calendar";
-import { isScheduled, useScheduleMetadata } from "./scheduling.js";
+import { useEffect, useState } from 'react'
+import client from 'part:@sanity/base/client'
+import { parseISO, isAfter } from 'date-fns'
+import config from 'config:content-calendar'
 
 export const useEvents = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([])
   const query = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))] {
       ...,
       "doc": * [_id == ^.documentId || _id == "drafts." + ^.documentId ][0]
     }
-  `;
-  const listenQuery = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))]`;
-  const types = config.types.map((t) => t.type);
+  `
+  const listenQuery = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))]`
+  const types = config.types.map((t) => t.type)
 
   const titleForEvent = (doc) => {
     if (doc) {
-      const typeConfig = config.types.find((t) => t.type === doc._type);
+      const typeConfig = config.types.find((t) => t.type === doc._type)
       if (typeConfig) {
-        return doc[typeConfig.titleField];
+        return doc[typeConfig.titleField]
       }
     }
-    return "Untitled?";
-  };
+    return 'Untitled?'
+  }
   const fetchWorkflowDocuments = () => {
-    client.fetch(query, { types }).then(handleReceiveEvents);
-  };
+    client.fetch(query, { types }).then(handleReceiveEvents)
+  }
   const handleReceiveEvents = (documents) => {
     const formatEvents = documents.map((event) => ({
       start: parseISO(event.datetime),
@@ -34,52 +33,48 @@ export const useEvents = () => {
       title: titleForEvent(event.doc),
       user: event.user,
       scheduledAt: event.scheduledAt,
-    }));
-    setEvents(formatEvents);
-  };
+    }))
+    setEvents(formatEvents)
+  }
 
   useEffect(() => {
-    fetchWorkflowDocuments();
+    fetchWorkflowDocuments()
 
-    const subscription = client.observable
-      .listen(listenQuery, { types })
-      .subscribe((result) => {
-        setTimeout(() => {
-          fetchWorkflowDocuments();
-        }, 2500);
-      });
+    const subscription = client.observable.listen(listenQuery, { types }).subscribe((result) => {
+      setTimeout(() => {
+        fetchWorkflowDocuments()
+      }, 2500)
+    })
     return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-  return events || undefined;
-};
+      subscription.unsubscribe()
+    }
+  }, [])
+  return events || undefined
+}
 
 export const useHasChanges = (event) => {
-  const id = event.doc?._id || "";
-  const [hasChanges, setHasChanges] = useState(false);
+  const id = event.doc?._id || ''
+  const [hasChanges, setHasChanges] = useState(false)
   const handleSetDraft = (document) => {
     if (isAfter(parseISO(document._updatedAt), parseISO(event.scheduledAt))) {
-      setHasChanges(true);
+      setHasChanges(true)
     }
-  };
+  }
 
   useEffect(() => {
-    let subscription;
+    let subscription
 
     if (id) {
       subscription = client.observable
-        .fetch(
-          `*[_id in path("drafts.${id}") || _id == '${id}'] | order(_updatedAt desc)`
-        )
+        .fetch(`*[_id in path("drafts.${id}") || _id == '${id}'] | order(_updatedAt desc)`)
         .subscribe((docs) => {
-          handleSetDraft(docs[0]);
-        });
+          handleSetDraft(docs[0])
+        })
     }
     return () => {
-      subscription.unsubscribe();
-    };
-  }, [id]);
+      subscription.unsubscribe()
+    }
+  }, [id])
 
-  return hasChanges;
-};
+  return hasChanges
+}
