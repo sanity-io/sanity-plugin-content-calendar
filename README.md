@@ -10,11 +10,11 @@ TODO: SCREENSHOT
 - Better content review
 - More time for quality content
 
-# Installation
+## Installation
 
 `sanity install content-calendar`
 
-## How to configure
+## Configuration
 
 To use the calendar, you must first tell it which document types and fields to use when looking for scheduled documents.
 
@@ -39,15 +39,15 @@ Create or open (the file is automatically created the first time the studio star
 }
 ```
 
-### Caveats
+## Caveats
 
-#### The actual publishing
+### Performing the publish event, in the future
 
 This plugin does not perform the publishing of documents on its own, as it is just a Studio plugin running in your editors browser. So in order to actually perform the scheduled publishing a script needs to run either periodically, or at the given publishing times to perform the publish action. We advise setting up a cronjob running for instance every minute that checks if any document should be published and then perform that action. A full script that does this is represented below.
 
 When the publish event eventually occurs, any newer draft will be discarded. This is why the plugin warns you if you make further changes to a document after you schedule it. If you do not want to lose these newer changes you'll need to Reschedule them, as the plugin prompts lets you do via the main action on a document in this state, and the Calendar view also will warn you about documents that have changes on top of scheduled content.
 
-#### Publishing the scheduled documents
+### Publishing the scheduled documents
 
 This script polls for pending scheduled publishing events and performs them. Typically you'll run this as a serverless function that is invoked every minute from a cronjob or other scheduled action, or you could schedule this script to run at specific times by using webhooks and listening for new schedule.metadata documents.
 
@@ -107,7 +107,7 @@ client
   );
 ```
 
-#### Scenario: You already have custom document actions implemented
+### Scenario: You already have custom document actions implemented
 
 This plugin adds the Schedule, Unschedule and Reschedule actions to your configured documents by implementing the part `part:@sanity/base/document-actions/resolver`. Because of a current limitation (as of version 2.0.9), these will not compose with your own implementation of this part for resolving document actions. If this is you, you need to add in the custom scheduling actions like in the following example
 
@@ -129,7 +129,7 @@ export default function resolveDocumentActions(props) {
 }
 ```
 
-#### Scenario: You already have custom document badges implemented
+### Scenario: You already have custom document badges implemented
 
 As with the case of already implemented custom document actions, if you have implemented custom document badges with `part:@sanity/base/document-badges/resolver` you'll currently need to add in the Scheduled badge from this plugin as in the following example
 
