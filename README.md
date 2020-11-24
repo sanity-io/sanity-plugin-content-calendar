@@ -18,7 +18,7 @@ TODO: SCREENSHOT
 
 To use the calendar, you must first tell it which document types and fields to use when looking for scheduled documents.
 
-Open up the config file found in ./config/content-calendar.json and add your document type and field combinations.
+Create or open (the file is automatically created the first time the studio starts after adding the plugin) the config file found in `config/content-calendar.json` in your Studio folder and add your document type and field combinations.
 
 ```json
 {
@@ -39,9 +39,15 @@ Open up the config file found in ./config/content-calendar.json and add your doc
 }
 ```
 
-### Example scheduler job, a script publishing the documents
+### Caveats
 
-The following is an example of a script that queries for scheduled events that should occur, and publishes those document revisions. You would probably want to run this script periodically, for instance every minute as a cronjob.
+This plugin does not perform the publishing of documents on its own, as it is just a Studio plugin running in your editors browser. So in order to actually perform the scheduled publishing a script needs to run either periodically, or at the given publishing times to perform the publish action. We advise setting up a cronjob running for instance every minute that checks if any document should be published and then perform that action. A full script that does this is represented below.
+
+When the publish event eventually occurs, any newer draft will be discarded. This is why the plugin warns you if you make further changes to a document after you schedule it. If you do not want to lose these newer changes you'll need to Reschedule them, as the plugin prompts lets you do via the main action on a document in this state, and the Calendar view also will warn you about documents that have changes on top of scheduled content.
+
+### Publishing the scheduled documents
+
+This script polls for pending scheduled publishing events and performs them. Typically you'll run this as a serverless function that is invoked every minute from a cronjob or other scheduled action, or you could schedule this script to run at specific times by using webhooks and listening for new schedule.metadata documents.
 
 ```javascript
 const sanityClient = require("@sanity/client");
