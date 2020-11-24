@@ -75,6 +75,8 @@ const publish = async (metadata, client) => {
 
   if (!revision) {
     // Here we have a situation where the scheduled revision does not exist
+    // This can happen if the document was deleted via Studio or API without
+    // unscheduling it first.
     console.error("Could not find document revision to publish", metadata);
     return;
   }
