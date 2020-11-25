@@ -72,7 +72,9 @@ export const useHasChanges = (event) => {
         })
     }
     return () => {
-      subscription.unsubscribe()
+      if (subscription) {
+        subscription.unsubscribe()
+      }
     }
   }, [id])
 
