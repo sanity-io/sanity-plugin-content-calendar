@@ -13,6 +13,7 @@ export const useEvents = () => {
   const listenQuery = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))]`
   const types = config.types.map((t) => t.type)
 
+  // TODO: Can we use the Preview components instead?
   const titleForEvent = (doc) => {
     if (doc) {
       const typeConfig = config.types.find((t) => t.type === doc._type)
