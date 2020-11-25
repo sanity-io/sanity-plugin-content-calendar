@@ -14,11 +14,11 @@ function scheduleBadge({ id, draft }) {
   return null
 }
 
-export function addScheduledBadge(badges) {
+export function addScheduledBadge(badges = []) {
   return badges.concat(scheduleBadge)
 }
 
 export default function resolveDocumentBadges(props) {
   const badges = defaultResolve(props)
-  return addScheduledBadge(scheduleBadge, badges)
+  return addScheduledBadge(badges)
 }
