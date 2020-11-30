@@ -6,15 +6,15 @@
   "parts": [
     {
       "implements": "part:@sanity/base/tool",
-      "path": "./src/index.js"
+      "path": "./index.js"
     },
     {
       "implements": "part:@sanity/base/document-actions/resolver",
-      "path": "./src/documentActions"
+      "path": "./documentActions"
     },
     {
       "implements": "part:@sanity/base/document-badges/resolver",
-      "path": "./src/documentBadges"
+      "path": "./documentBadges"
     }
   ]
 }
