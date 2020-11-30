@@ -1,21 +1,34 @@
 {
   "name": "sanity-plugin-content-calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Content Calendar for your Sanity Studio",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src -d build --copy-files",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build"
   },
-  "author": "Rune Botten",
+  "author": "Sanity.io <hello@sanity.io>",
   "license": "MIT",
   "dependencies": {
+    "@babel/runtime": "^7.6.2",
     "date-fns": "^2.16.1",
     "react-big-calendar": "^0.28.6"
   },
+  "devDependencies": {
+    "@babel/cli": "^7.6.3",
+    "@babel/core": "^7.6.3",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0"
+  },
   "peerDependencies": {
-    "@sanity/base": "^2.0.2",
-    "@sanity/components": "^2.0.2",
-    "@sanity/react-hooks": "^2.0.2",
+    "@sanity/base": "^2.0.9",
+    "@sanity/react-hooks": "^2.0.9",
+    "@sanity/components": "^2.0.9",
+    "@sanity/core": "^2.0.9",
+    "@sanity/react-hooks": "^2.0.9",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }
