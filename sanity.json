@@ -10,11 +10,11 @@
     },
     {
       "implements": "part:@sanity/base/document-actions/resolver",
-      "path": "documentActions"
+      "path": "documentActions.js"
     },
     {
       "implements": "part:@sanity/base/document-badges/resolver",
-      "path": "documentBadges"
+      "path": "documentBadges.js"
     }
   ]
 }
