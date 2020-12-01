@@ -52,35 +52,35 @@ When the publish event eventually occurs, any newer draft will be discarded. Thi
 This script polls for pending scheduled publishing events and performs them. Typically you'll run this as a serverless function that is invoked every minute from a cronjob or other scheduled action, or you could schedule this script to run at specific times by using webhooks and listening for new schedule.metadata documents.
 
 ```javascript
-const sanityClient = require("@sanity/client");
+const sanityClient = require('@sanity/client')
 const client = sanityClient({
-  projectId: "your-project-id",
-  dataset: "your-dataset-name",
+  projectId: 'your-project-id',
+  dataset: 'your-dataset-name',
   // Need a write token in order to read schedule metadata and publish documents
-  token: "your-write-token",
+  token: 'your-write-token',
   useCdn: false,
-});
+})
 
 // Query for any scheduled publish events that should occur
-const query = `* [_type == "schedule.metadata" && !(_id in path("drafts.**")) && datetime <= now()]`;
+const query = `* [_type == "schedule.metadata" && !(_id in path("drafts.**")) && datetime <= now()]`
 
 const publish = async (metadata, client) => {
-  const dataset = client.config().dataset;
-  const id = metadata.documentId;
-  const rev = metadata.rev;
+  const dataset = client.config().dataset
+  const id = metadata.documentId
+  const rev = metadata.rev
 
   // Fetch the draft revision we should publish from the History API
-  const uri = `/data/history/${dataset}/documents/drafts.${id}?revision=${rev}`;
+  const uri = `/data/history/${dataset}/documents/drafts.${id}?revision=${rev}`
   const revision = await client
     .request({ uri })
-    .then((response) => response.documents.length && response.documents[0]);
+    .then((response) => response.documents.length && response.documents[0])
 
   if (!revision) {
     // Here we have a situation where the scheduled revision does not exist
     // This can happen if the document was deleted via Studio or API without
     // unscheduling it first.
-    console.error("Could not find document revision to publish", metadata);
-    return;
+    console.error('Could not find document revision to publish', metadata)
+    return
   }
 
   // Publish it
@@ -97,14 +97,12 @@ const publish = async (metadata, client) => {
       // And finally we delete the schedule medadata, since we're done with it.
       .delete(metadata._id)
       .commit()
-  );
-};
+  )
+}
 
 client
   .fetch(query)
-  .then((response) =>
-    Promise.all(response.map((metadata) => publish(metadata, client)))
-  );
+  .then((response) => Promise.all(response.map((metadata) => publish(metadata, client))))
 ```
 
 ### Scenario: You already have custom document actions implemented
@@ -114,18 +112,18 @@ This plugin adds the Schedule, Unschedule and Reschedule actions to your configu
 ```javascript
 // import the default document actions
 import defaultResolve from 'part:@sanity/base/document-actions'
-import { adjustActionsForScheduledPublishing } from 'sanity-plugin-content-calendar/src/documentActions'
+import { addActions } from 'sanity-plugin-content-calendar/build/register'
 
 const CustomAction = () => ({
   label: 'Hello world',
   onHandle: () => {
     window.alert('👋 Hello from custom action')
-  }
+  },
 })
 
 export default function resolveDocumentActions(props) {
   const actions = [...defaultResolve(props), CustomAction]
-  return adjustActionsForScheduledPublishing(props, actions)
+  return addActions(props, actions)
 }
 ```
 
@@ -135,19 +133,18 @@ As with the case of already implemented custom document actions, if you have imp
 
 ```javascript
 import defaultResolve from 'part:@sanity/base/document-badges'
-import { addScheduledBadge } from 'sanity-plugin-content-calendar/src/documentBadges'
+import { addBadge } from 'sanity-plugin-content-calendar/build/register'
 
 const CustomBadge = () => {
   return {
     label: 'Custom',
     title: 'Hello I am a custom document badge',
-    color: 'success'
+    color: 'success',
   }
 }
 
 export default function resolveDocumentBadges(props) {
   const badges = [...defaultResolve(props), CustomBadge]
-  return addScheduledBadge(badges)
+  return addBadge(props, badges)
 }
-
 ```
