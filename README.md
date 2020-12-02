@@ -2,7 +2,7 @@
 
 Schedule content for later publication and view your content agenda in a visual calendar. Prioritize and get organized on the fly.
 
-TODO: SCREENSHOT
+![Sanity Content Calendar in Studio](https://cdn.sanity.io/images/3do82whm/next/d54091e26bf136069b0cce00b11a02fda2a5ddae-2844x1780.png?h=650)
 
 ## Features
 
