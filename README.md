@@ -53,6 +53,7 @@ Create or open the config file found in `config/content-calendar.json`. The file
 ```
 
 In the configuration values, you can also modify how the dates and times are formatted on the calendar, as well as being able to show the document author.
+
 ### Installing with other custom document actions
 
 The plugin adds the Schedule, Unschedule, and Reschedule actions to your configured documents by implementing the part `part:@sanity/base/document-actions/resolver`.
