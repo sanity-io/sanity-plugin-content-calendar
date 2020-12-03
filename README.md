@@ -107,7 +107,8 @@ This plugin does not perform the publishing of documents on its own, as it is ju
 
 We advise setting up a cronjob running for instance every minute that checks if any document should be published and then perform that action. A full script that does this is represented below.
 
-When the publish event eventually occurs, any newer draft will be discarded. This is why the plugin warns you if you make further changes to a document after you schedule it.If you don't want to lose the newer changes an editor will need to Reschedule them. The plugin will prompt for this with a warning in the calendar view and an updated document action.
+When the publish event eventually occurs, any newer draft will be discarded. This is why the plugin warns you if you make further changes to a document after you schedule it. If you don't want to lose the newer changes an editor will need to Reschedule them. The plugin will prompt for this with a warning in the calendar view and an updated document action.
+
 ### Publishing the scheduled documents
 
 To publish documents, you can set up a serverless function to poll for pending scheduled events and perform the action. Typically, this can be run from a cronjob every minute or from another scheduled action. 
