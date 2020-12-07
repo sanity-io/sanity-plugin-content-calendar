@@ -12,16 +12,14 @@ Schedule and view your editorial calendar, right where you store your content. P
 - More time to create content, less time spent scheduling
 
 ## Table of contents
-- [Sanity Plugin Content Calendar](#sanity-plugin-content-calendar)
-  - [Features](#features)
-  - [Table of contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-    - [Installing with other custom document actions](#installing-with-other-custom-document-actions)
-    - [Installing with other custom document badges](#installing-with-other-custom-document-badges)
-  - [Usage](#usage)
-    - [Performing the publish event, in the future](#performing-the-publish-event-in-the-future)
-    - [Publishing the scheduled documents](#publishing-the-scheduled-documents)
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+  - [Installing with other custom document actions](#installing-with-other-custom-document-actions)
+  - [Installing with other custom document badges](#installing-with-other-custom-document-badges)
+- [Usage](#usage)
+  - [Performing the publish event, in the future](#performing-the-publish-event-in-the-future)
+  - [Publishing the scheduled documents](#publishing-the-scheduled-documents)
 
 ## Installation
 
