@@ -12,13 +12,16 @@ Schedule and view your editorial calendar, right where you store your content. P
 - More time to create content, less time spent scheduling
 
 ## Table of contents
-- [Installation](#installation)
-- [Configuration](#configuration)
-  - [Installing with other custom document actions](#installing-with-other-custom-document-actions)
-  - [Installing with other custom document badges](#installing-with-other-custom-document-badges)
-- [Usage](#usage)
-  - [Performing the publish event, in the future](#performing-the-publish-event-in-the-future)
-  - [Publishing the scheduled documents](#publishing-the-scheduled-documents)
+- [Sanity Plugin Content Calendar](#sanity-plugin-content-calendar)
+  - [Features](#features)
+  - [Table of contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+    - [Installing with other custom document actions](#installing-with-other-custom-document-actions)
+    - [Installing with other custom document badges](#installing-with-other-custom-document-badges)
+  - [Usage](#usage)
+    - [Performing the publish event, in the future](#performing-the-publish-event-in-the-future)
+    - [Publishing the scheduled documents](#publishing-the-scheduled-documents)
 
 ## Installation
 
@@ -53,6 +56,9 @@ Create or open the config file found in `config/content-calendar.json`. The file
 ```
 
 In the configuration values, you can also modify how the dates and times are formatted on the calendar, as well as being able to show the document author.
+
+> Note: the type.field option signals when this post should be scheduled to release, this requires us to add a "date" or "datetime" field to the document you want to enable
+> scheduling for.
 
 ### Installing with other custom document actions
 
@@ -104,7 +110,7 @@ export default function resolveDocumentBadges(props) {
 ## Usage
 ### Performing the publish event, in the future
 
-This plugin does not perform the publishing of documents on its own, as it is just a Studio plugin running in an editors' browser. In order to actually perform the scheduled publishing, a script needs to run either periodically, or at the given publishing times to perform the publish action. 
+This plugin does not perform the publishing of documents on its own, as it is just a Studio plugin running in an editors' browser. In order to actually perform the scheduled publishing, a script needs to run either periodically, or at the given publishing times to perform the publish action.
 
 We advise setting up a cronjob running for instance every minute that checks if any document should be published and then perform that action. A full script that does this is represented below.
 
@@ -112,7 +118,7 @@ When the publish event eventually occurs, any newer draft will be discarded. Thi
 
 ### Publishing the scheduled documents
 
-To publish documents, you can set up a serverless function to poll for pending scheduled events and perform the action. Typically, this can be run from a cronjob every minute or from another scheduled action. 
+To publish documents, you can set up a serverless function to poll for pending scheduled events and perform the action. Typically, this can be run from a cronjob every minute or from another scheduled action.
 
 Alternatively, you could schedule this script to run at specific times by using webhooks and listening for new `schedule.metadata` documents.
 
