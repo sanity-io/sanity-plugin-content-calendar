@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import client from 'part:@sanity/base/client'
 import { parseISO, isAfter } from 'date-fns'
 import config from 'config:content-calendar'
+import delve from 'dlv'
+
+const DEFAULT_TITLE = 'Untitled?'
 
 export const useEvents = () => {
   const [events, setEvents] = useState([])
@@ -18,10 +21,10 @@ export const useEvents = () => {
     if (doc) {
       const typeConfig = config.types.find((t) => t.type === doc._type)
       if (typeConfig) {
-        return doc[typeConfig.titleField]
+        return delve(doc, typeConfig.titleField, DEFAULT_TITLE)
       }
     }
-    return 'Untitled?'
+    return DEFAULT_TITLE
   }
   const fetchWorkflowDocuments = () => {
     client.fetch(query, { types }).then(handleReceiveEvents)
