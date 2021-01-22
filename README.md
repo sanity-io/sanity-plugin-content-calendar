@@ -39,7 +39,7 @@ Create or open the config file found in `config/content-calendar.json`. The file
     {
       "type": "post",
       "field": "publishedAt",
-      "titleField": "title"
+      "titleField": "title" // nested properties are valid too, e.g. "title.en"
     }
   ],
   "calendar": {
