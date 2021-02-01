@@ -44,12 +44,10 @@ export const scheduleAction = ({ id, draft, onComplete, type, liveEdit }) => {
   const isNewContent = draft._rev !== metadata.data.rev
   if (!isNewScheduleDate && !isNewContent) return null
 
-  let label = !scheduled ? 'Schedule' : 'Reschedule'
-
   return {
     disabled: !enabled,
     icon: CalendarIcon,
-    label,
+    label: !scheduled ? 'Schedule' : 'Reschedule',
     color: scheduled ? 'warning' : 'success',
     onHandle: () => {
       metadata.setData(datetime, draft._rev)

@@ -65,7 +65,7 @@ export default function EventDialog({ event, isOpen, onClose }) {
             >
               {hasChanges ? 'Review changes' : 'Edit'}
             </IntentButton>
-            <Button secondary kind="inverted" onClick={onClose}>
+            <Button kind="secondary" onClick={onClose}>
               Cancel
             </Button>
           </ButtonGrid>
