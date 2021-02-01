@@ -40,7 +40,7 @@ Create or open the config file found in `config/content-calendar.json`. The file
     {
       "type": "post",
       "field": "publishedAt",
-      "titleField": "title" // nested properties are valid too, e.g. "title.en"
+      "titleField": "title"
     }
   ],
   "calendar": {
@@ -52,6 +52,8 @@ Create or open the config file found in `config/content-calendar.json`. The file
   }
 }
 ```
+
+`titleField` also supports nested properties, like `title.en`.
 
 In the configuration values, you can also modify how the dates and times are formatted on the calendar, as well as being able to show the document author.
 
