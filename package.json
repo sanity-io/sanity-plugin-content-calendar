@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-content-calendar",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A Content Calendar for your Sanity Studio",
   "main": "build/index.js",
   "scripts": {
