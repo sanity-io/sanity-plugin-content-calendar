@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src -d build --copy-files",
     "test": "exit 0",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "author": "Sanity.io <hello@sanity.io>",
   "license": "MIT",
