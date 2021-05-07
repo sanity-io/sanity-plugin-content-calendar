@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react'
-import client from 'part:@sanity/base/client'
+import sanityClient from 'part:@sanity/base/client'
 import { parseISO, isAfter } from 'date-fns'
 import config from 'config:content-calendar'
 import delve from 'dlv'
+
+let client = sanityClient
+if (typeof sanityClient.withConfig == "function") {
+  client = sanityClient.withConfig({
+    apiVersion: "v1"
+  })
+}
 
 const DEFAULT_TITLE = 'Untitled?'
 
