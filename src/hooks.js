@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import client from 'part:@sanity/base/client'
+import sanityClient from 'part:@sanity/base/client'
 import { parseISO, isAfter } from 'date-fns'
 import config from 'config:content-calendar'
 import delve from 'dlv'
 
 const DEFAULT_TITLE = 'Untitled?'
+
+const client = sanityClient.withConfig({ apiVersion: '2020-03-25' })
 
 export const useEvents = () => {
   const [events, setEvents] = useState([])
