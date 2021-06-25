@@ -69,6 +69,5 @@ export function useScheduleMetadata(id) {
           scheduledAt: new Date().toISOString(),
         })
       )
-      .then(ops.publish.execute)
   }
 }
