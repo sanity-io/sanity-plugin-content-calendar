@@ -32,13 +32,14 @@ export function isScheduled({ id }) {
 
 export function useScheduleMetadata(id) {
   const metadataId = `schedule-metadata.${id}`
-  const editState = useEditState(metadataId, 'schedule.metadata')
-  const ops = useDocumentOperation(metadataId, 'schedule.metadata')
+  const metadataType = 'schedule.metadata'
+  const editState = useEditState(metadataId, metadataType)
+  const ops = useDocumentOperation(metadataId, metadataType)
 
   const data =
     editState && editState.published
       ? editState.published
-      : { _id: metadataId, _type: 'schedule.metadata' }
+      : { _id: metadataId, _type: metadataType }
 
   return {
     commit,
@@ -61,7 +62,7 @@ export function useScheduleMetadata(id) {
       .then((user) =>
         client.createOrReplace({
           _id: metadataId,
-          _type: 'schedule.metadata',
+          _type: metadataType,
           documentId: id,
           datetime,
           rev,
