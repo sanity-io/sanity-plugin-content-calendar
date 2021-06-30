@@ -2,6 +2,7 @@ import { useDocumentOperation, useEditState } from '@sanity/react-hooks'
 import { isFuture, parseISO } from 'date-fns'
 import config from 'config:content-calendar'
 import userStore from 'part:@sanity/base/user'
+import client from './client'
 
 export function schedulingEnabled(type) {
   return !!config.types.find((t) => t.type === type)
@@ -30,13 +31,15 @@ export function isScheduled({ id }) {
 }
 
 export function useScheduleMetadata(id) {
-  const editState = useEditState(`schedule-metadata.${id}`, 'schedule.metadata')
-  const ops = useDocumentOperation(`schedule-metadata.${id}`, 'schedule.metadata')
+  const metadataId = `schedule-metadata.${id}`
+  const metadataType = 'schedule.metadata'
+  const editState = useEditState(metadataId, metadataType)
+  const ops = useDocumentOperation(metadataId, metadataType)
 
   const data =
     editState && editState.published
       ? editState.published
-      : { _id: `schedule-metadata.${id}`, _type: 'schedule.metadata' }
+      : { _id: metadataId, _type: metadataType }
 
   return {
     commit,
@@ -54,22 +57,18 @@ export function useScheduleMetadata(id) {
   }
 
   function setData(datetime, rev) {
-    userStore.getUser('me').then((user) => {
-      const now = new Date(Date.now())
-      ops.patch.execute([
-        {
-          setIfMissing: {
-            documentId: id,
-            user,
-            rev,
-            scheduledAt: now.toISOString(),
-          },
-        },
-        {
-          set: { datetime, rev, user, scheduledAt: now.toISOString() },
-        },
-      ])
-      ops.publish.execute()
-    })
+    userStore
+      .getUser('me')
+      .then((user) =>
+        client.createOrReplace({
+          _id: metadataId,
+          _type: metadataType,
+          documentId: id,
+          datetime,
+          rev,
+          user,
+          scheduledAt: new Date().toISOString(),
+        })
+      )
   }
 }
