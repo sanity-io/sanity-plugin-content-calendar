@@ -49,7 +49,8 @@ Create or open the config file found in `config/content-calendar.json`. The file
       "timeFormat": "hh:mm a",
       "showAuthor": "false"
     }
-  }
+  },
+  "hideWarnings": false
 }
 ```
 
@@ -59,6 +60,8 @@ In the configuration values, you can also modify how the dates and times are for
 
 > Note: the type.field option signals when this post should be scheduled to release, this requires us to add a "date" or "datetime" field to the document you want to enable
 > scheduling for.
+
+`hideWarnings` may be useful if your Publishing method does not involve scheduling a specific Document Revision. By default Warnings will show if a Document has been edited after it was originally Scheduled – and before it has been Published.
 
 ### Installing with other custom document actions
 

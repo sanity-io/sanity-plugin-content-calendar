@@ -3,14 +3,14 @@ import styles from './Event.css'
 import { useHasChanges } from './hooks'
 import WarningIcon from 'part:@sanity/base/warning-icon'
 import { format } from 'date-fns'
-import { timeFormat } from './config'
+import { hideWarnings, timeFormat } from './config'
 
 export default function Event({ event }) {
   const hasChanges = useHasChanges(event)
   return (
     <div className={styles.root} title={event.title} data-edits={hasChanges}>
       <div className={styles.titleWrapper}>
-        {hasChanges && (
+        {hasChanges && !hideWarnings && (
           <div className={styles.icon}>
             <WarningIcon />
           </div>

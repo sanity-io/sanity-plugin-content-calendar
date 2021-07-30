@@ -5,7 +5,7 @@ import schema from 'part:@sanity/base/schema'
 import { format } from 'date-fns'
 import User from './User'
 import styles from './AgendaEvent.css'
-import { dateFormat, timeFormat, showAuthor } from './config'
+import { dateFormat, timeFormat, showAuthor, hideWarnings } from './config'
 import IntentButton from 'part:@sanity/components/buttons/intent'
 import HistoryIcon from 'part:@sanity/base/history-icon'
 import EditIcon from 'part:@sanity/base/edit-icon'
@@ -13,6 +13,7 @@ import Warning from './Warning'
 import { getPublishedId } from 'part:@sanity/base/util/draft-utils'
 
 export default function AgendaEvent({ event }) {
+  console.log({hideWarnings})
   const hasDraft = useHasChanges(event)
   const publishedId = getPublishedId(event.doc._id || '')
   return (
@@ -38,7 +39,7 @@ export default function AgendaEvent({ event }) {
           </div>
         </div>
         <div className={styles.actionsWrapper}>
-          {hasDraft && (
+          {hasDraft && !hideWarnings && (
             <div className={styles.warning}>
               <Warning />
             </div>

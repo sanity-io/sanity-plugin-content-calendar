@@ -12,7 +12,7 @@ import { useHasChanges } from './hooks'
 import Warning from './Warning'
 import { format } from 'date-fns'
 import User from './User'
-import { dateFormat, timeFormat, dialogTitle, showAuthor } from './config'
+import { dateFormat, timeFormat, dialogTitle, showAuthor, hideWarnings } from './config'
 import { getPublishedId } from 'part:@sanity/base/util/draft-utils'
 
 export default function EventDialog({ event, isOpen, onClose }) {
@@ -28,7 +28,7 @@ export default function EventDialog({ event, isOpen, onClose }) {
       padding="none"
     >
       <div className={styles.root}>
-        {hasChanges && (
+        {hasChanges && !hideWarnings && (
           <div className={styles.warning}>
             <Warning />
           </div>
