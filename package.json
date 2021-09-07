@@ -9,7 +9,7 @@
     "test": "exit 0",
     "prepare": "npm run build",
     "postinstall": "husky install",
-    "prepublishOnly": "pinst --disable && sanipack build && sanipack verify",
+    "prepublishOnly": "pinst --disable && babel src -d build --copy-files",
     "postpublish": "pinst --enable",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
