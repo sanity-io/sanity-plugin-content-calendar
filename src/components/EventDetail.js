@@ -9,7 +9,7 @@ import {RevertIcon, EditIcon} from '@sanity/icons'
 import {format} from 'date-fns'
 
 import {useHasChanges} from '../hooks'
-import {dateFormat, showAuthor, timeFormat, hideWarnings} from '../config'
+import {dateFormat, showAuthor, timeFormat} from '../config'
 import Warning from './Warning'
 import User from './User'
 
@@ -22,7 +22,7 @@ export default function EventDetail({event, onClose}) {
 
   return (
     <Stack padding={4} space={4}>
-      {hasChanges && !hideWarnings && <Warning />}
+      {hasChanges && <Warning />}
       <Preview value={event.doc} type={schema.get(event.doc._type)} />
 
       <Grid space={2} columns={showAuthor ? 2 : 1}>

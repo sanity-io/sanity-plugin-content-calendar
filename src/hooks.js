@@ -4,7 +4,6 @@ import sanityClient from 'part:@sanity/base/client'
 import {parseISO, isAfter} from 'date-fns'
 import config from 'config:content-calendar'
 import delve from 'dlv'
-import {hideWarnings} from './config'
 
 let client = sanityClient
 if (typeof sanityClient.withConfig == 'function') {
@@ -69,7 +68,7 @@ export const useHasChanges = event => {
   const id = event.doc?._id || ''
   const [hasChanges, setHasChanges] = useState(false)
   const handleSetDraft = document => {
-    if (!hideWarnings && isAfter(parseISO(document._updatedAt), parseISO(event.scheduledAt))) {
+    if (isAfter(parseISO(document._updatedAt), parseISO(event.scheduledAt))) {
       setHasChanges(true)
     }
   }

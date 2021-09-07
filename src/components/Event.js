@@ -4,7 +4,7 @@ import React from 'react'
 import WarningIcon from 'part:@sanity/base/warning-icon'
 import {format} from 'date-fns'
 import {Box, Card, Stack, Text, Flex} from '@sanity/ui'
-import {hideWarnings, timeFormat} from '../config'
+import {timeFormat} from '../config'
 import {useHasChanges} from '../hooks'
 
 export default function Event({event}) {
@@ -20,7 +20,7 @@ export default function Event({event}) {
         radius={2}
       >
         <Flex align="center" gap={2}>
-          {hasChanges && !hideWarnings && <WarningIcon />}
+          {hasChanges && <WarningIcon />}
           <Stack space={2}>
             <Text
               size={1}
@@ -28,7 +28,7 @@ export default function Event({event}) {
               style={{
                 paddingTop: 5,
                 textOverflow: 'ellipsis',
-                overflowX: 'auto'
+                overflowX: 'clip'
               }}
             >
               {event.title}

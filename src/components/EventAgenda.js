@@ -8,7 +8,7 @@ import {Button, Box, Flex, Stack, Label, Inline} from '@sanity/ui'
 import {HistoryIcon, EditIcon} from '@sanity/icons'
 
 import {useHasChanges} from '../hooks'
-import {showAuthor, hideWarnings} from '../config'
+import {showAuthor} from '../config'
 import Warning from './Warning'
 import User from './User'
 
@@ -21,7 +21,7 @@ export default function EventDetail({event}) {
 
   return (
     <Stack padding={2} space={2}>
-      {hasChanges && !hideWarnings && <Warning />}
+      {hasChanges && <Warning />}
       <Flex align="center" gap={4}>
         <Box flex={1}>
           <Preview value={event.doc} type={schema.get(event.doc._type)} />
