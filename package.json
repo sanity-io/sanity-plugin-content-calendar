@@ -1,20 +1,33 @@
 {
   "name": "sanity-plugin-content-calendar",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "A Content Calendar for your Sanity Studio",
   "main": "build/index.js",
   "scripts": {
     "build": "babel src -d build --copy-files",
+    "watch": "babel src -d build -w --copy-files",
     "test": "exit 0",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable && sanipack build && sanipack verify",
+    "postpublish": "pinst --enable",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:fix"
+    }
   },
   "author": "Sanity.io <hello@sanity.io>",
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "^7.6.2",
-    "date-fns": "^2.16.1",
+    "@babel/runtime": "^7.15.4",
+    "@sanity/ui": "^0.36.3",
+    "date-fns": "^2.23.0",
     "dlv": "^1.1.3",
-    "react-big-calendar": "^0.28.6"
+    "react-big-calendar": "^0.35.0",
+    "husky": "^7.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.3",
@@ -22,7 +35,23 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.0.0",
-    "@babel/preset-react": "^7.0.0"
+    "@babel/preset-react": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "autoprefixer": "^10.2.4",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-sanity": "^5.0.0",
+    "eslint-import-resolver-webpack": "^0.11.1",
+    "eslint-plugin-cypress": "^2.11.2",
+    "eslint-plugin-es5": "^1.4.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "pinst": "^2.1.6",
+    "typescript": "^4.3.4"
   },
   "peerDependencies": {
     "@sanity/base": "^2.0.9",

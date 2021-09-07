@@ -1,8 +1,10 @@
 import sanityClient from 'part:@sanity/base/client'
-let client = sanityClient
-if (typeof sanityClient.withConfig === 'function') {
-  client = sanityClient.withConfig({
-    apiVersion: '1',
-  })
-}
+
+const client =
+  typeof sanityClient.withConfig === 'function'
+    ? sanityClient.withConfig({
+        apiVersion: '2021-09-06'
+      })
+    : sanityClient
+
 export default client

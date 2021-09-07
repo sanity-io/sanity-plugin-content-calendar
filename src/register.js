@@ -1,7 +1,7 @@
-import { DeleteAction, PublishAction } from 'part:@sanity/base/document-actions'
-import { ScheduledBadge } from './badges/ScheduledBadge'
-import { scheduleAction, unScheduleAction } from './actions/schedule'
-import { useScheduleMetadata, schedulingEnabled } from './scheduling'
+import {DeleteAction, PublishAction} from 'part:@sanity/base/document-actions'
+import {ScheduledBadge} from './badges/ScheduledBadge'
+import {scheduleAction, unScheduleAction} from './actions/schedule'
+import {useScheduleMetadata, schedulingEnabled} from './scheduling'
 
 function CustomDeleteAction(params) {
   const metadata = useScheduleMetadata(params.id)
@@ -13,7 +13,7 @@ function CustomDeleteAction(params) {
 
   const result = DeleteAction({
     ...params,
-    onComplete,
+    onComplete
   })
   return result
 }
@@ -28,14 +28,14 @@ function CustomPublishAction(params) {
     onHandle: () => {
       result.onHandle()
       metadata.delete()
-    },
+    }
   }
 }
 
-export function addActions({ type }, actions) {
+export function addActions({type}, actions) {
   if (schedulingEnabled(type)) {
     return [scheduleAction, unScheduleAction, CustomPublishAction, CustomDeleteAction].concat(
-      actions.filter((action) => !['DeleteAction', 'PublishAction'].includes(action.name))
+      actions.filter(action => !['DeleteAction', 'PublishAction'].includes(action.name))
     )
   }
   return actions

@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import {useEffect, useState} from 'react'
 import sanityClient from 'part:@sanity/base/client'
-import { parseISO, isAfter } from 'date-fns'
+import {parseISO, isAfter} from 'date-fns'
 import config from 'config:content-calendar'
 import delve from 'dlv'
-import { hideWarnings } from './config'
+import {hideWarnings} from './config'
 
 let client = sanityClient
 if (typeof sanityClient.withConfig == 'function') {
   client = sanityClient.withConfig({
-    apiVersion: 'v1',
+    apiVersion: 'v1'
   })
 }
 
@@ -22,12 +23,11 @@ export const useEvents = () => {
     }
   `
   const listenQuery = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))]`
-  const types = config.types.map((t) => t.type)
+  const types = config.types.map(t => t.type)
 
-  // TODO: Can we use the Preview components instead?
-  const titleForEvent = (doc) => {
+  const titleForEvent = doc => {
     if (doc) {
-      const typeConfig = config.types.find((t) => t.type === doc._type)
+      const typeConfig = config.types.find(t => t.type === doc._type)
       if (typeConfig) {
         return delve(doc, typeConfig.titleField, DEFAULT_TITLE)
       }
@@ -35,16 +35,16 @@ export const useEvents = () => {
     return DEFAULT_TITLE
   }
   const fetchWorkflowDocuments = () => {
-    client.fetch(query, { types }).then(handleReceiveEvents)
+    client.fetch(query, {types}).then(handleReceiveEvents)
   }
-  const handleReceiveEvents = (documents) => {
-    const formatEvents = documents.map((event) => ({
+  const handleReceiveEvents = documents => {
+    const formatEvents = documents.map(event => ({
       start: parseISO(event.datetime),
       end: parseISO(event.datetime),
       doc: event.doc,
       title: titleForEvent(event.doc),
       user: event.user,
-      scheduledAt: event.scheduledAt,
+      scheduledAt: event.scheduledAt
     }))
     setEvents(formatEvents)
   }
@@ -52,7 +52,7 @@ export const useEvents = () => {
   useEffect(() => {
     fetchWorkflowDocuments()
 
-    const subscription = client.observable.listen(listenQuery, { types }).subscribe((result) => {
+    const subscription = client.observable.listen(listenQuery, {types}).subscribe(result => {
       setTimeout(() => {
         fetchWorkflowDocuments()
       }, 2500)
@@ -60,14 +60,15 @@ export const useEvents = () => {
     return () => {
       subscription.unsubscribe()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return events || undefined
 }
 
-export const useHasChanges = (event) => {
+export const useHasChanges = event => {
   const id = event.doc?._id || ''
   const [hasChanges, setHasChanges] = useState(false)
-  const handleSetDraft = (document) => {
+  const handleSetDraft = document => {
     if (!hideWarnings && isAfter(parseISO(document._updatedAt), parseISO(event.scheduledAt))) {
       setHasChanges(true)
     }
@@ -79,7 +80,7 @@ export const useHasChanges = (event) => {
     if (id) {
       subscription = client.observable
         .fetch(`*[_id in path("drafts.${id}") || _id == '${id}'] | order(_updatedAt desc)`)
-        .subscribe((docs) => {
+        .subscribe(docs => {
           handleSetDraft(docs[0])
         })
     }
@@ -91,4 +92,17 @@ export const useHasChanges = (event) => {
   }, [id])
 
   return hasChanges
+}
+
+export function useStickyState(defaultValue, key) {
+  const [value, setValue] = useState(() => {
+    const stickyValue = window.localStorage.getItem(key)
+    return stickyValue === null ? defaultValue : JSON.parse(stickyValue)
+  })
+
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value))
+  }, [key, value])
+
+  return [value, setValue]
 }
