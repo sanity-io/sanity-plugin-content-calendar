@@ -1,17 +1,17 @@
 import config from 'config:content-calendar'
 
-export const { types = [], calendar = {} } = config
+export const {types = [], calendar = {}} = config
 
 export const {
   events = {
     dateFormat: 'MMMM dd, yyyy',
     timeFormat: 'HH:mm',
-    dialogTitle,
+    dialogTitle
   },
   nativeOptions = {
-    views: ['month', 'agenda'],
+    views: ['month', 'agenda']
   },
-  showAuthor = true,
+  showAuthor = true
 } = calendar
 
-export const { dateFormat, timeFormat, dialogTitle } = events
+export const {dateFormat, timeFormat, dialogTitle} = events

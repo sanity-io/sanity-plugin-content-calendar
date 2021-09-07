@@ -1,4 +1,4 @@
-@import "part:@sanity/base/theme/variables-style";
+@import 'part:@sanity/base/theme/variables-style';
 
 :root {
   --border-style: 1px solid rgba(0, 0, 0, 0.1);
@@ -21,12 +21,12 @@
 }
 
 .heading {
-  composes: heading2 from "part:@sanity/base/theme/typography/forms-style";
+  composes: heading2 from 'part:@sanity/base/theme/typography/forms-style';
   margin: 0;
 }
 
 .description {
-  composes: description from "part:@sanity/base/theme/typography/text-blocks-style";
+  composes: description from 'part:@sanity/base/theme/typography/text-blocks-style';
 }
 
 .calendar {
@@ -35,55 +35,45 @@
   color: var(--text-color);
   font-family: var(--font-family-sans-serif);
 
-  @nest & div[class*="rbc-event"] {
+  @nest & div[class*='rbc-event'] {
     padding: 0;
+    margin: 0;
+    background: transparent;
   }
 
-  @nest & div[class*="rbc-toolbar"] button {
-    background: var(--default-button-color--inverted);
-    border-radius: var(--button-border-radius);
-    border-color: var(--input-border-color);
-  }
-  @nest & div[class*="rbc-toolbar"] button[class*="rbc-active"] {
-    background: var(--state-info-color);
-    color: var(--state-info-color--inverted);
-  }
-
-  @nest & div[class*="rbc-off-range"] {
+  @nest & div[class*='rbc-off-range'] {
     background: var(--input-bg-disabled);
   }
 
-  /* @nest & div[class*="rbc-date-cell"] {
-    border-left: var(--input-border-size) solid var(--input-border-color);
-  } */
-
-  @nest & div[class*="rbc-header"] {
+  @nest & div[class*='rbc-header'] {
     padding: var(--small-padding);
     text-align: right;
     font-weight: normal;
   }
 
-  @nest & div[class*="rbc-today"] {
+  @nest & div[class*='rbc-today'] {
     background: var(--component-bg);
   }
 
-  @nest & div[class*="rbc-row"] div[class*="rbc-date-cell"] {
+  @nest & div[class*='rbc-row'] div[class*='rbc-date-cell'] {
     padding: 5px;
+    background: transparent;
 
     @nest & a {
       font-size: var(--font-size-small);
     }
   }
 
-  @nest & div[class*="rbc-row-bg"] {
+  @nest & div[class*='rbc-row-bg'] {
     background: var(--component-bg);
   }
 
-  @nest & div[class*="rbc-now"] a {
+  @nest & div[class*='rbc-now'] a {
     font-weight: normal;
-    background: var(--state-danger-color);
+    background: var(--card-focus-ring-color);
     border-radius: 25px;
-    color: var(--state-danger-color--inverted);
+    font-weight: bold;
+    color: white;
     display: flex;
     width: 25px;
     height: 25px;
@@ -103,7 +93,7 @@
   background: var(--component-bg);
   color: var(--text-color);
 
-  @nest &[class*="rbc-selected"] {
+  @nest &[class*='rbc-selected'] {
     background: 0;
   }
 }

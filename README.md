@@ -28,6 +28,7 @@ Run the following command in your studio folder using [the Sanity CLI](https://w
 ```sh
 sanity install content-calendar
 ```
+
 ## Configuration
 
 To use the calendar, the plugin needs to know which document types to display and what fields to use for scheduling documents.
@@ -71,13 +72,13 @@ To implement the plugin, add the custom scheduling actions with your custom acti
 ```javascript
 // import the default document actions
 import defaultResolve from 'part:@sanity/base/document-actions'
-import { addActions } from 'sanity-plugin-content-calendar/build/register'
+import {addActions} from 'sanity-plugin-content-calendar/build/register'
 
 const CustomAction = () => ({
   label: 'Hello world',
   onHandle: () => {
     window.alert('👋 Hello from custom action')
-  },
+  }
 })
 
 export default function resolveDocumentActions(props) {
@@ -92,13 +93,13 @@ Much like custom document actions, if you have implemented custom document badge
 
 ```javascript
 import defaultResolve from 'part:@sanity/base/document-badges'
-import { addBadge } from 'sanity-plugin-content-calendar/build/register'
+import {addBadge} from 'sanity-plugin-content-calendar/build/register'
 
 const CustomBadge = () => {
   return {
     label: 'Custom',
     title: 'Hello I am a custom document badge',
-    color: 'success',
+    color: 'success'
   }
 }
 
@@ -107,7 +108,9 @@ export default function resolveDocumentBadges(props) {
   return addBadge(props, badges)
 }
 ```
+
 ## Usage
+
 ### Performing the publish event, in the future
 
 This plugin does not perform the publishing of documents on its own, as it is just a Studio plugin running in an editors' browser. In order to actually perform the scheduled publishing, a script needs to run either periodically, or at the given publishing times to perform the publish action.
@@ -129,7 +132,7 @@ const client = sanityClient({
   dataset: 'your-dataset-name',
   // Need a write token in order to read schedule metadata and publish documents
   token: 'your-write-token',
-  useCdn: false,
+  useCdn: false
 })
 
 // Query for any scheduled publish events that should occur
@@ -143,8 +146,8 @@ const publish = async (metadata, client) => {
   // Fetch the draft revision we should publish from the History API
   const uri = `/data/history/${dataset}/documents/drafts.${id}?revision=${rev}`
   const revision = await client
-    .request({ uri })
-    .then((response) => response.documents.length && response.documents[0])
+    .request({uri})
+    .then(response => response.documents.length && response.documents[0])
 
   if (!revision) {
     // Here we have a situation where the scheduled revision does not exist
@@ -162,7 +165,7 @@ const publish = async (metadata, client) => {
       // `drafts.` prefix. The `documentId` field on the metadata already does
       // not include this prefix, but the revision we fetched probably does, so
       // we overwrite it here.
-      .createOrReplace(Object.assign({}, revision, { _id: id }))
+      .createOrReplace(Object.assign({}, revision, {_id: id}))
       // Then we delete any current draft.
       .delete(`drafts.${id}`)
       // And finally we delete the schedule medadata, since we're done with it.
@@ -173,5 +176,5 @@ const publish = async (metadata, client) => {
 
 client
   .fetch(query)
-  .then((response) => Promise.all(response.map((metadata) => publish(metadata, client))))
+  .then(response => Promise.all(response.map(metadata => publish(metadata, client))))
 ```
