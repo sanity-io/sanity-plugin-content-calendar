@@ -66,9 +66,32 @@ export const useEvents = () => {
 
 export const useHasChanges = event => {
   const id = event.doc?._id || ''
+  const {filterWarnings} = config
+
   const [hasChanges, setHasChanges] = useState(false)
-  const handleSetDraft = document => {
-    if (isAfter(parseISO(document._updatedAt), parseISO(event.scheduledAt))) {
+  const handleSetDraft = doc => {
+    // Check if the document meets a condition to not show a Warning
+    if (filterWarnings?.length) {
+      const filterChecks = filterWarnings
+        // Check they're arrays of objects
+        .filter(filters => Object.keys(filters)?.length)
+        .map(filters => {
+          const matches = Object.keys(filters).filter(key => {
+            return delve(doc, key) === delve(filters, key)
+          })
+
+          // Were there as many matches as there are keys?
+          return matches.length === Object.keys(filters).length
+        })
+
+      // Did any of the filters return true?
+      if (filterChecks.some(check => check)) {
+        return setHasChanges(false)
+      }
+    }
+
+    // Otherwise, check if the document was edited after it was scheduled
+    if (isAfter(parseISO(doc._updatedAt), parseISO(event.scheduledAt))) {
       setHasChanges(true)
     }
   }
@@ -78,7 +101,7 @@ export const useHasChanges = event => {
 
     if (id) {
       subscription = client.observable
-        .fetch(`*[_id in path("drafts.${id}") || _id == '${id}'] | order(_updatedAt desc)`)
+        .fetch(`*[_id in path("drafts.${id}") || _id == "${id}"] | order(_updatedAt desc)`)
         .subscribe(docs => {
           handleSetDraft(docs[0])
         })

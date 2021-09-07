@@ -1,6 +1,6 @@
 import config from 'config:content-calendar'
 
-export const {types = [], calendar = {}} = config
+export const {types = [], calendar = {}, filterWarnings = {}} = config
 
 export const {
   events = {
