@@ -70,7 +70,7 @@
 
   @nest & div[class*='rbc-now'] a {
     font-weight: normal;
-    background: var(--card-focus-ring-color);
+    background: var(--brand-primary);
     border-radius: 25px;
     font-weight: bold;
     color: white;

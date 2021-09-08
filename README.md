@@ -50,7 +50,8 @@ Create or open the config file found in `config/content-calendar.json`. The file
       "timeFormat": "hh:mm a",
       "showAuthor": "false"
     }
-  }
+  },
+  "filterWarnings": {}
 }
 ```
 
@@ -58,8 +59,23 @@ Create or open the config file found in `config/content-calendar.json`. The file
 
 In the configuration values, you can also modify how the dates and times are formatted on the calendar, as well as being able to show the document author.
 
-> Note: the type.field option signals when this post should be scheduled to release, this requires us to add a "date" or "datetime" field to the document you want to enable
-> scheduling for.
+> Note: the type.field option signals when this post should be scheduled to release, this requires us to add a "date" or "datetime" field to the document you want to enable scheduling for.
+
+If edits are made to a Document after it has been Scheduled, a Warning will show. However, if you want to hide this, use the `filterWarnings` key. This will evaluate the Document for a matching condition, so for example:
+
+```json
+"filterWarnings": [
+  {"_type": "article", "title.en": "Hello!"},
+  {"isLive": true},
+]
+```
+
+If an Event matches all of the conditions in an any of the Objects in the Array, the Warning will be hidden.
+
+In the example above:
+
+- A document with the type `article` **AND** a `title.en` value of `Hello!` will not show Warnings **OR**
+- Any document with an `isLive` field value of `true` will not show Warnings
 
 ### Installing with other custom document actions
 
