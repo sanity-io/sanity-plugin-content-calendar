@@ -51,7 +51,7 @@ Create or open the config file found in `config/content-calendar.json`. The file
       "showAuthor": "false"
     }
   },
-  "filterWarnings": {}
+  "filterWarnings": []
 }
 ```
 
