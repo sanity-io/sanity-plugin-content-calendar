@@ -32,12 +32,22 @@ function CustomPublishAction(params) {
   }
 }
 
-export function addActions({type}, actions) {
+export function addActions({type}, actions = []) {
   if (schedulingEnabled(type)) {
-    return [scheduleAction, unScheduleAction, CustomPublishAction, CustomDeleteAction].concat(
-      actions.filter(action => !['DeleteAction', 'PublishAction'].includes(action.name))
-    )
+    const pluginActions = [
+      scheduleAction,
+      unScheduleAction,
+      CustomPublishAction,
+      CustomDeleteAction
+    ]
+
+    const defaultActions = actions.filter(action => {
+      return action !== DeleteAction && action !== PublishAction
+    })
+
+    return [...pluginActions, ...defaultActions]
   }
+
   return actions
 }
 
