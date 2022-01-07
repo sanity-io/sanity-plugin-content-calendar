@@ -6,6 +6,7 @@
   "scripts": {
     "build": "babel src -d build --copy-files",
     "watch": "babel src -d build -w --copy-files",
+    "dev": "npm run watch",
     "test": "exit 0",
     "prepare": "npm run build",
     "postinstall": "husky install",

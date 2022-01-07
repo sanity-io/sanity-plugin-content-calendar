@@ -37,14 +37,16 @@ export const useEvents = () => {
     client.fetch(query, {types}).then(handleReceiveEvents)
   }
   const handleReceiveEvents = documents => {
-    const formatEvents = documents.map(event => ({
-      start: parseISO(event.datetime),
-      end: parseISO(event.datetime),
-      doc: event.doc,
-      title: titleForEvent(event.doc),
-      user: event.user,
-      scheduledAt: event.scheduledAt
-    }))
+    const formatEvents = documents
+      .filter(d => !!d.doc)
+      .map(event => ({
+        start: parseISO(event.datetime),
+        end: parseISO(event.datetime),
+        doc: event.doc,
+        title: titleForEvent(event.doc),
+        user: event.user,
+        scheduledAt: event.scheduledAt
+      }))
     setEvents(formatEvents)
   }
 
