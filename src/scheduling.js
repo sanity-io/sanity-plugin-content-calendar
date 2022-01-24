@@ -13,9 +13,15 @@ export function publishAt({draft}) {
   if (!draft) return null
   const typeConfig = config.types.find(t => t.type === draft._type)
   if (typeConfig) {
-    return draft[typeConfig.field]
+    return resolve(typeConfig.field, draft)
   }
   return null
+}
+
+function resolve(path, obj) {
+  return path.split('.').reduce(function(prev, curr) {
+      return prev ? prev[curr] : null
+  }, obj || self)
 }
 
 export function publishInFuture({draft}) {
