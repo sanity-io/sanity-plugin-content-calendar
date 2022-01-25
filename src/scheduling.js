@@ -4,6 +4,7 @@ import {isFuture, parseISO} from 'date-fns'
 import config from 'config:content-calendar'
 import userStore from 'part:@sanity/base/user'
 import client from './client'
+import delve from 'dlv'
 
 export function schedulingEnabled(type) {
   return !!config.types.find(t => t.type === type)
@@ -13,15 +14,9 @@ export function publishAt({draft}) {
   if (!draft) return null
   const typeConfig = config.types.find(t => t.type === draft._type)
   if (typeConfig) {
-    return resolve(typeConfig.field, draft)
+    return delve(typeConfig.field, draft)
   }
   return null
-}
-
-function resolve(path, obj) {
-  return path.split('.').reduce(function(prev, curr) {
-      return prev ? prev[curr] : null
-  }, obj || self)
 }
 
 export function publishInFuture({draft}) {
