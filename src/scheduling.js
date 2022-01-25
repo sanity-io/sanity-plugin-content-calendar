@@ -14,7 +14,7 @@ export function publishAt({draft}) {
   if (!draft) return null
   const typeConfig = config.types.find(t => t.type === draft._type)
   if (typeConfig) {
-    return delve(typeConfig.field, draft)
+    return delve(draft, typeConfig.field)
   }
   return null
 }
