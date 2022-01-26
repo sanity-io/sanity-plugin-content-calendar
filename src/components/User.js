@@ -20,8 +20,12 @@ export default function User({user, minimal = false}) {
   )
 }
 
+User.defaultProps = {
+  minimal: false
+}
+
 User.propTypes = {
-  minimal: PropTypes.bool.isRequired,
+  minimal: PropTypes.bool,
   user: PropTypes.shape({
     displayName: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired
