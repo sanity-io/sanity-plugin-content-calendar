@@ -18,7 +18,7 @@ export const useEvents = () => {
   const [events, setEvents] = useState([])
   const query = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))] {
       ...,
-      "doc": * [_id == ^.documentId || _id == "drafts." + ^.documentId ][0]
+      "doc": * [_id == "drafts." + ^.documentId ][0]
     }
   `
   const listenQuery = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))]`
