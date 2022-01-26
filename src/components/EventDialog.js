@@ -20,7 +20,7 @@ export default function EventDialog({event, isOpen, onClose}) {
 
 EventDialog.propTypes = {
   event: PropTypes.shape({
-    start: PropTypes.string
+    start: PropTypes.instanceOf(Date)
   }).isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired

@@ -43,7 +43,7 @@ export default function Event({event}) {
 
 Event.propTypes = {
   event: PropTypes.shape({
-    start: PropTypes.string,
+    start: PropTypes.instanceOf(Date),
     title: PropTypes.string
   }).isRequired
 }

@@ -65,7 +65,7 @@ EventDetail.propTypes = {
       _id: PropTypes.string,
       _type: PropTypes.string
     }).isRequired,
-    start: PropTypes.string,
+    start: PropTypes.instanceOf(Date),
     user: PropTypes.object
   }).isRequired,
   onClose: PropTypes.func.isRequired
