@@ -1,17 +1,25 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {CalendarIcon} from '@sanity/icons'
 import {isFuture, parseISO} from 'date-fns'
-import {useValidationStatus} from '@sanity/react-hooks'
+import {useValidationStatus} from 'sanity'
 import {
   publishAt,
-  isScheduled,
+  useIsScheduled,
   useScheduleMetadata,
   publishInFuture,
   schedulingEnabled
 } from '../scheduling'
+import {DocumentActionProps} from 'sanity/desk'
+import {TypeConfig} from '../types'
 
-export const unScheduleAction = ({id, draft, onComplete}) => {
-  const scheduled = isScheduled({draft, id})
+export function createUnScheduleAction(types: TypeConfig[]) {
+  return (props: DocumentActionProps) => {
+    return unScheduleAction({...props, types})
+  }
+}
+
+export const unScheduleAction = ({id, onComplete}: DocumentActionProps & {types: TypeConfig[]}) => {
+  const scheduled = useIsScheduled({id})
   const metadata = useScheduleMetadata(id)
   if (!scheduled) return null
 
@@ -27,19 +35,32 @@ export const unScheduleAction = ({id, draft, onComplete}) => {
   }
 }
 
-export const scheduleAction = ({id, draft, onComplete, type, liveEdit}) => {
+export function createScheduleAction(types: TypeConfig[]) {
+  return (props: DocumentActionProps) => {
+    return scheduleAction({...props, types})
+  }
+}
+
+export const scheduleAction = ({
+  id,
+  draft,
+  onComplete,
+  type,
+  liveEdit,
+  types
+}: DocumentActionProps & {types: TypeConfig[]}) => {
   const metadata = useScheduleMetadata(id)
   const validationStatus = useValidationStatus(id, type)
-  const scheduled = isScheduled({draft, id})
-  if (liveEdit || !schedulingEnabled(type)) return null
+  const scheduled = useIsScheduled({id})
+  if (liveEdit || !schedulingEnabled(type, types)) return null
   if (!draft) return null
-  const datetime = publishAt({draft})
+  const datetime = publishAt({draft, types})
   if (!datetime) return null
   if (!isFuture(parseISO(datetime))) return null
 
-  const hasValidationErrors = validationStatus.markers.some(marker => marker.level === 'error')
+  const hasValidationErrors = validationStatus.validation.some(marker => marker.level === 'error')
 
-  const enabled = publishInFuture({draft}) && !hasValidationErrors
+  const enabled = publishInFuture({draft, types}) && !hasValidationErrors
 
   const isNewScheduleDate = datetime !== metadata.data.datetime
   const isNewContent = draft._rev !== metadata.data.rev

@@ -1,6 +1,7 @@
 import {useScheduleMetadata} from '../scheduling'
+import {DocumentBadgeDescription, DocumentBadgeProps} from 'sanity/desk'
 
-export function ScheduledBadge({id, draft}) {
+export function ScheduledBadge({id, draft}: DocumentBadgeProps): DocumentBadgeDescription | null {
   const metadata = useScheduleMetadata(id)
   if (draft && metadata.data && metadata.data.datetime) {
     return {

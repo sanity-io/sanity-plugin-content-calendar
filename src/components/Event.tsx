@@ -1,15 +1,20 @@
-import PropTypes from 'prop-types'
-import React from 'react'
+import React, {ComponentType, useContext} from 'react'
 
-import WarningIcon from 'part:@sanity/base/warning-icon'
+import {WarningOutlineIcon as WarningIcon} from '@sanity/icons'
 import {format} from 'date-fns'
 import {Box, Card, Stack, Text, Flex} from '@sanity/ui'
-import {timeFormat} from '../config'
 import {useHasChanges} from '../hooks'
+import {CalendarConfigContext, defaultConfig} from '../config'
+import {CalendarEvent} from '../types'
+import {EventProps} from 'react-big-calendar'
 
-export default function Event({event}) {
+const Event: ComponentType<EventProps<CalendarEvent>> = function Event({event}) {
   const hasChanges = useHasChanges(event)
-
+  const {
+    calendar: {
+      events: {timeFormat = defaultConfig.calendar.events.timeFormat}
+    }
+  } = useContext(CalendarConfigContext)
   return (
     <Box padding={1}>
       <Card
@@ -41,9 +46,4 @@ export default function Event({event}) {
   )
 }
 
-Event.propTypes = {
-  event: PropTypes.shape({
-    start: PropTypes.instanceOf(Date),
-    title: PropTypes.string
-  }).isRequired
-}
+export default Event

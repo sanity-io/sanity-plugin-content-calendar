@@ -5,37 +5,21 @@ module.exports = {
     node: true,
     browser: true
   },
-  settings: {
-    react: {version: '16.9.0'}
-  },
   extends: [
     'sanity',
+    'sanity/typescript',
     'sanity/react',
-    'sanity/import',
     'plugin:react-hooks/recommended',
-    'prettier'
+    'plugin:prettier/recommended'
   ],
   rules: {
     'no-use-before-define': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     'import/no-extraneous-dependencies': 'off', // because of parts
-    'import/no-unresolved': ['error', {ignore: ['.*:.*']}], // because of parts
-    'prettier/prettier': [
-      'error',
-      {
-        semi: false,
-        printWidth: 100,
-        bracketSpacing: false,
-        singleQuote: true
-      }
-    ],
-    'sort-imports': 'off', // prefer import/order
-    'react/jsx-no-bind': [
-      1,
-      {
-        ignoreDOMComponents: true
-      }
-    ],
+    'sort-imports': 'off', // prefer import/order,
+    'react/require-default-props': 'off',
+    'react/prop-types': 'off',
+    'react/jsx-no-bind': 'off',
     'react/forbid-prop-types': [0]
   },
   plugins: ['prettier', 'react'],
@@ -43,7 +27,8 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       rules: {
-        'no-undef': 'off'
+        'no-undef': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off'
       }
     }
   ]

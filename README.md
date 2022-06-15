@@ -1,5 +1,13 @@
 # Sanity Plugin Content Calendar
 
+> **NOTE**
+>
+> This is the **Sanity Studio v3 version** of sanity-plugin-content-calendar.
+>
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/sanity-plugin-content-calendar).
+
+## What is it?
+
 Schedule and view your editorial calendar, right where you store your content. Prioritize and get organized on the fly with a visual calendar in your Studio.
 
 ![Sanity Content Calendar in Studio](https://cdn.sanity.io/images/3do82whm/next/d54091e26bf136069b0cce00b11a02fda2a5ddae-2844x1780.png?h=650)
@@ -20,47 +28,84 @@ Schedule and view your editorial calendar, right where you store your content. P
 - [Usage](#usage)
   - [Performing the publish event, in the future](#performing-the-publish-event-in-the-future)
   - [Publishing the scheduled documents](#publishing-the-scheduled-documents)
+- [Changes from Sanity Studio v2 version](#changes-from-sanity-studio-v2-version)
 
 ## Installation
 
-Run the following command in your studio folder using [the Sanity CLI](https://www.sanity.io/docs/getting-started-with-sanity-cli):
+Run the following command in your studio directory 
 
 ```sh
-sanity install content-calendar
+npm install --save sanity-plugin-content-calendar@studio-v3
+```
+
+or
+
+```sh
+yarn add sanity-plugin-content-calendar@studio-v3
 ```
 
 ## Configuration
 
 To use the calendar, the plugin needs to know which document types to display and what fields to use for scheduling documents.
 
-Create or open the config file found in `config/content-calendar.json`. The file is automatically created the first time the studio starts after adding the plugin. Add your document type and field combinations.
+Add it as a plugin in sanity.config.ts (or .js):
 
-```json
+```js
+import { createConfig } from "sanity";
+import { contentCalendar } from "sanity-plugin-content-calendar";
+
+export default createConfig({
+  // ...
+  plugins: [
+    contentCalendar({
+      types: [
+        {
+          type: "post",
+          field: "publishedAt",
+          titleField: "title"
+        },
+      ]
+    })
+  ] 
+})
+```
+
+## Additional configuration
+
+The content calender can be configured according to the [CalendarConfig](src/index.tsx) interface.
+
+All configuration defaults shown below:
+```js
 {
-  "types": [
-    {
-      "type": "post",
-      "field": "publishedAt",
-      "titleField": "title"
-    }
-  ],
-  "calendar": {
-    "event": {
-      "dateFormat": "MMMM, dd yyyy",
-      "timeFormat": "hh:mm a",
-      "showAuthor": "false"
-    }
+  calendar: {
+    types: [],
+    events: {
+      dateFormat: 'MMMM dd, yyyy',
+      timeFormat: 'HH:mm',
+      dialogTitle: 'Schedule details'
+    },
+    nativeOptions: {
+      views: ['month', 'agenda']
+    },
+    showAuthor: true
   },
-  "filterWarnings": []
+  filterWarnings: []
 }
 ```
 
-`titleField` also supports nested properties, like `title.en`.
+#### `types.titleField`
+
+`types.titleField` also supports nested properties, like `title.en`.
+
+#### `type.field`
+
+The type.field option signals when this post should be scheduled to release, this requires us to add a "date" or "datetime" field to the document you want to enable scheduling for.
+
+#### `events.dateFormat` and  `events.timeFormat`
 
 In the configuration values, you can also modify how the dates and times are formatted on the calendar, as well as being able to show the document author.
 
-> Note: the type.field option signals when this post should be scheduled to release, this requires us to add a "date" or "datetime" field to the document you want to enable scheduling for.
-
+#### `filterWarnings`
 If edits are made to a Document after it has been Scheduled, a Warning will show. However, if you want to hide this, use the `filterWarnings` key. This will evaluate the Document for a matching condition, so for example:
 
 ```json
@@ -70,7 +115,7 @@ If edits are made to a Document after it has been Scheduled, a Warning will show
 ]
 ```
 
-If an Event matches all of the conditions in an any of the Objects in the Array, the Warning will be hidden.
+If an Event matches all the conditions in an any of the Objects in the Array, the Warning will be hidden.
 
 In the example above:
 
@@ -79,65 +124,91 @@ In the example above:
 
 ### Installing with other custom document actions
 
-The plugin adds the Schedule, Unschedule, and Reschedule actions to your configured documents by implementing the part `part:@sanity/base/document-actions/resolver`.
+By default, this plugin adds the Schedule, Unschedule, and Reschedule actions to your configured document action by appending
+them to any other actions the Studio may have.
 
-Because of a current limitation (as of version 2.0.9), these will not compose with your own implementation of this part for resolving document actions. For more on the parts system, [see the part system documentation](https://www.sanity.io/docs/parts).
+However, by default, **Publish and Delete actions are replaced** with content-calendar compatible versions.
+If you have other plugins that also modifies these actions you either have to:
 
-To implement the plugin, add the custom scheduling actions with your custom action.
+1. Put the document-calendar plugin first in the `sanity.config.ts` plugins-array 
+2. OR manually compose actions as a last step in your studio configuration
 
-```javascript
-// import the default document actions
-import defaultResolve from 'part:@sanity/base/document-actions'
-import {addActions} from 'sanity-plugin-content-calendar/build/register'
+#### Option 1 - Put document-calendar first
 
-const CustomAction = () => ({
-  label: 'Hello world',
-  onHandle: () => {
-    window.alert('👋 Hello from custom action')
-  }
+Right:
+```js
+export default createConfig({
+  // ...
+  plugins: [
+    contentCalendar({ /* */ }),
+    pluginThatModifiesPublishOrDeleteAction()      
+  ] 
 })
+```
 
-export default function resolveDocumentActions(props) {
-  const actions = [...defaultResolve(props), CustomAction]
-  return addActions(props, actions)
-}
+Wrong:
+```js
+export default createConfig({
+  // ...
+  plugins: [
+    pluginThatModifiesPublishOrDeleteAction(),
+    contentCalendar({ /* */ }),
+  ] 
+})
+```
+
+#### Option 2 - Manually compose actions using studio config
+
+Use the `document.actions` factory-function in `createConfig` to compose your actions in whatever way
+makes sense for your particular Studio setup.
+
+Look to [addActions](src/register.ts) for how this plugin handles action composition by default, and make sure to
+add/replace/compose/wrap previousActions PublishAction/DeleteAction with [CalendarPublishAction](./src/register.ts) and
+[CalendarDeleteAction](./src/register.ts).
+
+```js
+import { contentCalendar, CalendarPublishAction, CalendarDeleteAction } from "sanity-plugin-content-calendar";
+
+export default createConfig({
+  // ...
+  plugins: [
+    otherPluginThatModifiesPublishOrDeleteAction().
+    contentCalendar({ /* */ }),
+  ],
+  document: {
+    actions: (previousActions, context) => {
+      /* Compose actions in whatever way makes sense using CalendarDeleteAction and CalendarPublishAction,
+        filter previousActions or otherwise create a new actions array */
+      const actions = [...previousActions]
+      return actions
+    }
+  },
+})
 ```
 
 ### Installing with other custom document badges
 
-Much like custom document actions, if you have implemented custom document badges with `part:@sanity/base/document-badges/resolver` you need to add in the Scheduled badge from the plugin.
-
-```javascript
-import defaultResolve from 'part:@sanity/base/document-badges'
-import {addBadge} from 'sanity-plugin-content-calendar/build/register'
-
-const CustomBadge = () => {
-  return {
-    label: 'Custom',
-    title: 'Hello I am a custom document badge',
-    color: 'success'
-  }
-}
-
-export default function resolveDocumentBadges(props) {
-  const badges = [...defaultResolve(props), CustomBadge]
-  return addBadge(props, badges)
-}
-```
+By default, this plugin adds the ScheduledBadge to your configured document badges by appending
+them to any other badges the Studio may have.
 
 ## Usage
 
 ### Performing the publish event, in the future
 
-This plugin does not perform the publishing of documents on its own, as it is just a Studio plugin running in an editors' browser. In order to actually perform the scheduled publishing, a script needs to run either periodically, or at the given publishing times to perform the publish action.
+This plugin does not perform the publishing of documents on its own, as it is just a Studio plugin running in an editors' browser. 
+In order to actually perform the scheduled publishing, a script needs to run either periodically, or at the given publishing times to perform the publish action.
 
-We advise setting up a cronjob running for instance every minute that checks if any document should be published and then perform that action. A full script that does this is represented below.
+We advise setting up a cronjob running for instance every minute that checks if any document should be published and then perform that action. 
+A full script that does this is represented below.
 
-When the publish event eventually occurs, any newer draft will be discarded. This is why the plugin warns you if you make further changes to a document after you schedule it. If you don't want to lose the newer changes an editor will need to Reschedule them. The plugin will prompt for this with a warning in the calendar view and an updated document action.
+When the publish event eventually occurs, any newer draft will be discarded. This is why the plugin warns you if you make further changes to a document after you schedule it. 
+If you don't want to lose the newer changes an editor will need to Reschedule them. 
+The plugin will prompt for this with a warning in the calendar view and an updated document action.
 
 ### Publishing the scheduled documents
 
-To publish documents, you can set up a serverless function to poll for pending scheduled events and perform the action. Typically, this can be run from a cronjob every minute or from another scheduled action.
+To publish documents, you can set up a serverless function to poll for pending scheduled events and perform the action. 
+Typically, this can be run from a cronjob every minute or from another scheduled action.
 
 Alternatively, you could schedule this script to run at specific times by using webhooks and listening for new `schedule.metadata` documents.
 
@@ -194,3 +265,36 @@ client
   .fetch(query)
   .then(response => Promise.all(response.map(metadata => publish(metadata, client))))
 ```
+
+### Changes from Sanity Studio v2 version
+
+The Studio V3 version differs from the v2 versions in a few ways:
+
+- Actions and badges now auto-compose with other document actions by default. This is the _opposite_ of how the v2 version behaves:
+  It is no longer necessary to compose actions and badges manually when there are other plugins that add those to studio.
+
+## License
+
+MIT-licensed. See LICENSE.
+
+## Develop & test
+
+Make sure to run `npm run build` once, then run
+
+```bash
+npm run link-watch
+```
+
+In another shell, `cd` to your test studio and run:
+
+```bash
+npx yalc add sanity-plugin-content-calendar --link && yarn install
+```
+
+Now, changes in this repo will be automatically built and pushed to the studio,
+triggering hotreload. Yalc avoids issues with react-hooks that are typical when using yarn/npm link.
+
+### About build & watch
+
+This plugin uses [@sanity/plugin-sdk](https://github.com/sanity-io/plugin-sdk)
+with default configuration for build & watch scripts.

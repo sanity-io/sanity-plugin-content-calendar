@@ -2,3 +2,8 @@ node_modules
 build/
 sanity-plugin-content-calendar*.tgz
 .turbo
+lib/
+.idea/
+yalc.lock
+.yalc
+.parcel-cache

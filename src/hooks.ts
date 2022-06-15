@@ -1,44 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useEffect, useState} from 'react'
-import sanityClient from 'part:@sanity/base/client'
+import {useContext, useEffect, useState} from 'react'
 import {parseISO, isAfter} from 'date-fns'
-import config from 'config:content-calendar'
 import delve from 'dlv'
-
-let client = sanityClient
-if (typeof sanityClient.withConfig == 'function') {
-  client = sanityClient.withConfig({
-    apiVersion: 'v1'
-  })
-}
+import {useSanityClient} from './client'
+import {CalendarConfigContext} from './config'
+import {SanityDocument} from 'sanity'
+import {CalendarEvent} from './types'
+import {Subscription} from 'rxjs'
 
 const DEFAULT_TITLE = 'Untitled?'
 
-export const useEvents = () => {
-  const [events, setEvents] = useState([])
+export const useEvents = (): CalendarEvent[] => {
+  const [events, setEvents] = useState<CalendarEvent[]>([])
   const query = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))] {
       ...,
       "doc": * [_id == "drafts." + ^.documentId ][0]
     }
   `
   const listenQuery = `* [_type == "schedule.metadata" && !(_id in path('drafts.**'))]`
-  const types = config.types.map(t => t.type)
+  const typeConfigs = useContext(CalendarConfigContext).types
+  const types = typeConfigs.map(t => t.type)
 
-  const titleForEvent = doc => {
+  const titleForEvent = (doc: SanityDocument) => {
     if (doc) {
-      const typeConfig = config.types.find(t => t.type === doc._type)
+      const typeConfig = typeConfigs.find(t => t.type === doc._type)
       if (typeConfig) {
         return delve(doc, typeConfig.titleField, DEFAULT_TITLE)
       }
     }
     return DEFAULT_TITLE
   }
+
   const fetchWorkflowDocuments = () => {
     client.fetch(query, {types}).then(handleReceiveEvents)
   }
-  const handleReceiveEvents = documents => {
-    const formatEvents = documents
-      .filter(d => !!d.doc)
+
+  const handleReceiveEvents = (documents: CalendarEvent[]) => {
+    const formatEvents: CalendarEvent[] = documents
+      .filter(
+        (d): d is CalendarEvent & {doc: SanityDocument; datetime: string} => !!d.doc && !!d.datetime
+      )
       .map(event => ({
         start: parseISO(event.datetime),
         end: parseISO(event.datetime),
@@ -49,6 +50,8 @@ export const useEvents = () => {
       }))
     setEvents(formatEvents)
   }
+
+  const client = useSanityClient('v1')
 
   useEffect(() => {
     fetchWorkflowDocuments()
@@ -62,16 +65,16 @@ export const useEvents = () => {
       subscription.unsubscribe()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  return events || undefined
+  }, [client])
+  return events
 }
 
-export const useHasChanges = event => {
+export const useHasChanges = (event: CalendarEvent) => {
   const id = event.doc?._id || ''
-  const {filterWarnings} = config
+  const {filterWarnings} = useContext(CalendarConfigContext)
 
   const [hasChanges, setHasChanges] = useState(false)
-  const handleSetDraft = doc => {
+  const handleSetDraft = (doc: SanityDocument) => {
     // Check if the document meets a condition to not show a Warning
     if (filterWarnings?.length) {
       const filterChecks = filterWarnings
@@ -96,10 +99,13 @@ export const useHasChanges = event => {
     if (isAfter(parseISO(doc._updatedAt), parseISO(event.scheduledAt))) {
       setHasChanges(true)
     }
+    return undefined
   }
 
+  const client = useSanityClient('v1')
+
   useEffect(() => {
-    let subscription
+    let subscription: Subscription
 
     if (id) {
       subscription = client.observable
@@ -113,12 +119,12 @@ export const useHasChanges = event => {
         subscription.unsubscribe()
       }
     }
-  }, [id])
+  }, [id, client])
 
   return hasChanges
 }
 
-export function useStickyState(defaultValue, key) {
+export function useStickyState<T>(defaultValue: T, key: string) {
   const [value, setValue] = useState(() => {
     const stickyValue = window.localStorage.getItem(key)
     return stickyValue === null ? defaultValue : JSON.parse(stickyValue)

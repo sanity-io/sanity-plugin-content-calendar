@@ -1,20 +1,23 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-no-bind */
-import PropTypes from 'prop-types'
-import React from 'react'
+import React, {ComponentType} from 'react'
 import {Card, Box, Text, Button, Flex} from '@sanity/ui'
 import {CalendarIcon, ThListIcon, ChevronRightIcon, ChevronLeftIcon} from '@sanity/icons'
+import {Messages, NavigateAction, ToolbarProps, View} from 'react-big-calendar'
+import {CalendarEvent} from '../types'
 
-const nav = [
-  {name: 'previous', increment: -1},
-  {name: 'today', increment: 0},
-  {name: 'next', increment: 1}
+type MessageKeys = keyof Messages
+
+const nav: {name: MessageKeys; increment: number; action: NavigateAction}[] = [
+  {name: 'previous', increment: -1, action: 'PREV'},
+  {name: 'today', increment: 0, action: 'TODAY'},
+  {name: 'next', increment: 1, action: 'NEXT'}
 ]
 
-export default function Toolbar(props) {
+const Toolbar: ComponentType<ToolbarProps<CalendarEvent>> = function Toolbar(props) {
   const {label, views, view, onView, onNavigate, localizer, date} = props
 
-  const changeMonth = (action = 'next', increment = 1) => {
+  const changeMonth = (action: NavigateAction = 'NEXT', increment = 1) => {
     let currentDate
 
     if (increment === 0) {
@@ -38,7 +41,7 @@ export default function Toolbar(props) {
           <Flex gap={2} align="center">
             <Card radius={4} overflow="auto" padding={1} shadow={1} tone="primary">
               <Flex gap={1} align="center">
-                {views.map(viewOption => (
+                {(views as View[]).map(viewOption => (
                   <Button
                     fontSize={1}
                     padding={3}
@@ -46,7 +49,7 @@ export default function Toolbar(props) {
                     radius={3}
                     tone="primary"
                     icon={viewOption === `month` ? CalendarIcon : ThListIcon}
-                    mode={view === viewOption ? `primary` : `bleed`}
+                    mode={view === viewOption ? `default` : `bleed`}
                     text={localizer.messages[viewOption]}
                     onClick={() => onView(viewOption)}
                   />
@@ -55,7 +58,7 @@ export default function Toolbar(props) {
             </Card>
             <Card radius={4} overflow="auto" padding={1} shadow={1} tone="primary">
               <Flex gap={1} align="center">
-                {nav.map(({name, increment}) => (
+                {nav.map(({name, increment, action}) => (
                   <Button
                     fontSize={1}
                     icon={name === 'previous' ? ChevronLeftIcon : undefined}
@@ -65,8 +68,8 @@ export default function Toolbar(props) {
                     radius={3}
                     tone="primary"
                     mode="bleed"
-                    text={localizer.messages[name]}
-                    onClick={() => changeMonth(name, increment)}
+                    text={localizer.messages[name] as string}
+                    onClick={() => changeMonth(action, increment)}
                   />
                 ))}
               </Flex>
@@ -77,15 +80,4 @@ export default function Toolbar(props) {
     </Box>
   )
 }
-
-Toolbar.propTypes = {
-  date: PropTypes.instanceOf(Date),
-  label: PropTypes.string,
-  localizer: PropTypes.shape({
-    messages: PropTypes.object
-  }),
-  onNavigate: PropTypes.func,
-  onView: PropTypes.func,
-  view: PropTypes.string,
-  views: PropTypes.arrayOf(PropTypes.string)
-}
+export default Toolbar
