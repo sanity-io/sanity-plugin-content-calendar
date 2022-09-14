@@ -6,7 +6,7 @@ import {useSanityClient} from './client'
 import {CalendarConfigContext} from './config'
 import {SanityDocument} from 'sanity'
 import {CalendarEvent} from './types'
-import {Subscription} from 'rxjs'
+import {SubscriptionLike} from 'rxjs'
 
 const DEFAULT_TITLE = 'Untitled?'
 
@@ -105,7 +105,7 @@ export const useHasChanges = (event: CalendarEvent) => {
   const client = useSanityClient('v1')
 
   useEffect(() => {
-    let subscription: Subscription
+    let subscription: SubscriptionLike
 
     if (id) {
       subscription = client.observable
