@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
-import {useSchema, getPublishedId} from 'sanity'
-import {useRouter, SanityPreview as Preview} from 'sanity/_unstable'
+import {useSchema, getPublishedId, useRouter} from 'sanity'
+import {SanityPreview as Preview} from 'sanity/_unstable'
 import {Button, Box, Flex, Stack, Label, Text, Grid} from '@sanity/ui'
 import {RevertIcon, EditIcon} from '@sanity/icons'
 import {format} from 'date-fns'
