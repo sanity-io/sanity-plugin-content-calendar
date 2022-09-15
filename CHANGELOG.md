@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-v3-studio.3](https://github.com/sanity-io/sanity-plugin-content-calendar/compare/v2.0.0-v3-studio.2...v2.0.0-v3-studio.3) (2022-09-15)
+
+### Bug Fixes
+
+- use new useClient api ([b935def](https://github.com/sanity-io/sanity-plugin-content-calendar/commit/b935def46e0df09a4c8d8b62f5a448285785ec70))
+
 ## [2.0.0-v3-studio.2](https://github.com/sanity-io/sanity-plugin-content-calendar/compare/v2.0.0-v3-studio.1...v2.0.0-v3-studio.2) (2022-09-14)
 
 ### Bug Fixes
