@@ -23,7 +23,12 @@ export type {
   MetadataDoc
 } from './types'
 
-export {addActions, addBadge, CalendarPublishAction, CalendarDeleteAction} from './register'
+export {
+  addActions,
+  addBadge,
+  createCalendarPublishAction,
+  createCalendarDeleteAction
+} from './register'
 export {schedulingEnabled} from './scheduling'
 export {createScheduleAction, createUnScheduleAction} from './actions/schedule'
 

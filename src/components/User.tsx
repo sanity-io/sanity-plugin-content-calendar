@@ -1,7 +1,6 @@
 import React from 'react'
-import {UserAvatar} from 'sanity/_unstable'
 import {Flex, Box, Text, Inline} from '@sanity/ui'
-import {User as UserType} from 'sanity'
+import {User as UserType, UserAvatar} from 'sanity'
 
 interface UserProps {
   user: UserType

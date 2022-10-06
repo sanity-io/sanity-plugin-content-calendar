@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {CalendarIcon} from '@sanity/icons'
 import {isFuture, parseISO} from 'date-fns'
-import {useValidationStatus} from 'sanity'
+import {useValidationStatus, DocumentActionProps} from 'sanity'
 import {
   publishAt,
   useIsScheduled,
@@ -9,7 +9,6 @@ import {
   publishInFuture,
   schedulingEnabled
 } from '../scheduling'
-import {DocumentActionProps} from 'sanity/desk'
 import {TypeConfig} from '../types'
 
 export function createUnScheduleAction(types: TypeConfig[]) {

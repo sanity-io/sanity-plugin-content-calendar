@@ -1,5 +1,5 @@
 import {useScheduleMetadata} from '../scheduling'
-import {DocumentBadgeDescription, DocumentBadgeProps} from 'sanity/desk'
+import {DocumentBadgeDescription, DocumentBadgeProps} from 'sanity'
 
 export function ScheduledBadge({id, draft}: DocumentBadgeProps): DocumentBadgeDescription | null {
   const metadata = useScheduleMetadata(id)
