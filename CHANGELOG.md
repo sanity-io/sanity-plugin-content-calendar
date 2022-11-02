@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-v3-studio.6](https://github.com/sanity-io/sanity-plugin-content-calendar/compare/v2.0.0-v3-studio.5...v2.0.0-v3-studio.6) (2022-11-02)
+
+### Bug Fixes
+
+- compiled for sanity 3.0.0-rc.0 ([a39cbb5](https://github.com/sanity-io/sanity-plugin-content-calendar/commit/a39cbb57852bf9c5f6115f03bc7187a6a5e73a99))
+
 ## [2.0.0-v3-studio.5](https://github.com/sanity-io/sanity-plugin-content-calendar/compare/v2.0.0-v3-studio.4...v2.0.0-v3-studio.5) (2022-10-27)
 
 ### Bug Fixes
