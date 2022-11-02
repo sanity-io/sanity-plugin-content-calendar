@@ -51,10 +51,10 @@ To use the calendar, the plugin needs to know which document types to display an
 Add it as a plugin in sanity.config.ts (or .js):
 
 ```js
-import { createConfig } from "sanity";
+import { defineFunction } from "sanity";
 import { contentCalendar } from "sanity-plugin-content-calendar";
 
-export default createConfig({
+export default defineFunction({
   // ...
   plugins: [
     contentCalendar({
@@ -72,7 +72,7 @@ export default createConfig({
 
 ## Additional configuration
 
-The content calender can be configured according to the [CalendarConfig](src/index.tsx) interface.
+The content calender can be configured according to the [CalendarConfig](src/index.ts) interface.
 
 All configuration defaults shown below:
 ```js
@@ -137,7 +137,7 @@ If you have other plugins that also modifies these actions you either have to:
 
 Right:
 ```js
-export default createConfig({
+export default defineFunction({
   // ...
   plugins: [
     contentCalendar({ /* */ }),
@@ -148,7 +148,7 @@ export default createConfig({
 
 Wrong:
 ```js
-export default createConfig({
+export default defineFunction({
   // ...
   plugins: [
     pluginThatModifiesPublishOrDeleteAction(),
@@ -159,7 +159,7 @@ export default createConfig({
 
 #### Option 2 - Manually compose actions using studio config
 
-Use the `document.actions` factory-function in `createConfig` to compose your actions in whatever way
+Use the `document.actions` factory-function in `defineFunction` to compose your actions in whatever way
 makes sense for your particular Studio setup.
 
 Look to [addActions](src/register.ts) for how this plugin handles action composition by default, and make sure to
@@ -169,7 +169,7 @@ add/replace/compose/wrap previousActions PublishAction/DeleteAction with [Calend
 ```js
 import { contentCalendar, CalendarPublishAction, CalendarDeleteAction } from "sanity-plugin-content-calendar";
 
-export default createConfig({
+export default defineFunction({
   // ...
   plugins: [
     otherPluginThatModifiesPublishOrDeleteAction().

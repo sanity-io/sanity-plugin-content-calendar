@@ -1,2 +1,9 @@
+/test
+/coverage
+.editorconfig
+.eslintrc
+.gitignore
+.github
 .prettierrc
-*.tgz
+.travis.yml
+.nyc_output

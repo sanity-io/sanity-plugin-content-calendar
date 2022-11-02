@@ -1,5 +1,5 @@
 import {CalendarIcon} from '@sanity/icons'
-import {createPlugin} from 'sanity'
+import {definePlugin} from 'sanity'
 import Calendar from './components/Calendar'
 import {addActions, addBadge} from './register'
 import React from 'react'
@@ -12,27 +12,7 @@ export type CalendarConfig = {
   filterWarnings?: FilterWarning[]
 }
 
-export type {
-  ContentCalendarPluginConfig,
-  FilterWarning,
-  TypeConfig,
-  EventsConfig,
-  CalenderConfig,
-  NativeOptions,
-  CalendarEvent,
-  MetadataDoc
-} from './types'
-
-export {
-  addActions,
-  addBadge,
-  createCalendarPublishAction,
-  createCalendarDeleteAction
-} from './register'
-export {schedulingEnabled} from './scheduling'
-export {createScheduleAction, createUnScheduleAction} from './actions/schedule'
-
-export const contentCalendar = createPlugin<CalendarConfig>(config => {
+export const contentCalendar = definePlugin<CalendarConfig>(config => {
   const configFull: ContentCalendarPluginConfig = {
     ...defaultConfig,
     ...config
