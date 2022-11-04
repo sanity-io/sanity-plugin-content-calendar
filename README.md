@@ -1,6 +1,7 @@
-# Sanity Plugin Content Calendar
+# **Deprecated:** Sanity Plugin Content Calendar
 
-> **NOTE**
+> NOTE: This plugin is *deprecated*.
+>Use [Sanity Scheduled Publishing](https://github.com/sanity-io/sanity-plugin-scheduled-publishing) instead.
 >
 > This is the **Sanity Studio v3 version** of sanity-plugin-content-calendar.
 >
