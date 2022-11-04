@@ -1,4 +1,11 @@
-# Sanity Plugin Content Calendar
+
+
+# **Deprecated:** Sanity Plugin Content Calendar
+
+>
+> NOTE: This plugin is *deprecated*.
+>Use [Sanity Scheduled Publishing](https://github.com/sanity-io/sanity-plugin-scheduled-publishing) instead.
+>
 
 Schedule and view your editorial calendar, right where you store your content. Prioritize and get organized on the fly with a visual calendar in your Studio.
 
